@@ -1,34 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class prisonAgent : Agent
 {
     public Transform Button;
     public Transform Goal;
     public Transform BlockagePos;
-    public GameObject[] Borders;
+    //public Transform plane;
+    //public GameObject[] Borders;
     public GameObject BlockPrefab;
+    public Text TextScore;
 
     public float speedMultiplier = 0.1f;
     public float rotationSpeed = 10f;
     public float jumpForce = 200f;
     public float buttonReward = 12f;
-    public float badWallReward = -4.0f;
+    public float badWallReward = -8.0f;
     public float goToWallReward = 0f;
     public float borderWallReward = -2.0f;
+    public float distanceToButtonReward = 1.5f;
     public bool isGrounded;
 
     Rigidbody rBody;
     private GameObject Blockage;
+    private int score = 0;
     private bool doesBlockageExist;
-    private float timeSinceStart = 0f;
-    private const float badRewardInterval = 25f; // interval for giving bad reward
-    private const float badRewardAmount = -0.5f; // amount of negative reward to give
+    //private float timeSinceStart = 0f;
+    //private const float badRewardInterval = 25f; // interval for giving bad reward
+    //private const float badRewardAmount = -0.5f; // amount of negative reward to give
 
     void Start()
     {
@@ -40,6 +42,7 @@ public class prisonAgent : Agent
         this.transform.localPosition = new Vector3(0, 0.5f, 0);
         buttonReward = 12.0f;
         goToWallReward = 0f;
+
         // if there's no blockage yet, spawn it
         if (Blockage == null)
         {
@@ -60,15 +63,15 @@ public class prisonAgent : Agent
 
         sensor.AddObservation(BlockagePos.localPosition);
         sensor.AddObservation(doesBlockageExist);
-        foreach (GameObject border in Borders)
-        {
-            sensor.AddObservation(border.transform.localPosition);
-        }
+        //foreach (GameObject border in Borders)
+        //{
+        //    sensor.AddObservation(border.transform.localPosition);
+        //}
 
         // Agent velocity
-        sensor.AddObservation(rBody.velocity);
-        //sensor.AddObservation(rBody.velocity.z);
-        //sensor.AddObservation(rBody.velocity.y);
+        sensor.AddObservation(rBody.velocity.x);
+        sensor.AddObservation(rBody.velocity.z);
+        sensor.AddObservation(rBody.velocity.y);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -110,42 +113,42 @@ public class prisonAgent : Agent
         float currentDistanceToGoal = Vector3.Distance(this.transform.localPosition, Goal.localPosition);
 
         // check if agent is close to any of the border
-        foreach (GameObject border in Borders)
-        {
-            float distanceToBorder = Vector3.Distance(transform.localPosition, border.transform.localPosition);
-            if (distanceToBorder < 1f)
-                SetReward(-0.5f);
-        }
+        //foreach (GameObject border in Borders)
+        //{
+        //    float distanceToBorder = Vector3.Distance(transform.localPosition, border.transform.localPosition);
+        //    if (distanceToBorder < 1f)
+        //        AddReward(0.5f);
+        //}
 
         // if agent can't continue yet
-        if (Blockage != null)
+        if (doesBlockageExist == true)
         {
             // go to button
             if (currentDistanceToButton > previousDistanceToButton)
-                SetReward(-1.5f);
+                AddReward(-distanceToButtonReward);
             else if (currentDistanceToButton < previousDistanceToButton)
-                SetReward(1.5f);
+                AddReward(distanceToButtonReward);
 
             // going close to blockage is bad
-            if (currentDistanceToBlockage < 1f)
-                SetReward(-1f);
+            if (currentDistanceToBlockage < previousDistanceToBlockage)
+                AddReward(-1f);
 
         }
         // if next room is available
-        else if (Blockage == null)
+        else if (doesBlockageExist == false)
         {
             // go to goal
             if (currentDistanceToGoal > previousDistanceToGoal)
-                SetReward(-1.0f);
+                AddReward(-1.0f);
             else if (currentDistanceToGoal < previousDistanceToGoal)
-                SetReward(1.0f);
+                AddReward(1.0f);
         }
 
 
         // Van het platform gevallen?
         if (this.transform.localPosition.y < 0)
         {
-            SetReward(-5f);
+            AddReward(-5f);
             EndEpisode();
         }
     }
@@ -158,13 +161,14 @@ public class prisonAgent : Agent
 
         if (collision.gameObject.CompareTag("badWall"))
         {
-            SetReward(badWallReward);
+            AddReward(badWallReward);
             EndEpisode();
         }
 
         if (collision.gameObject.CompareTag("goToWall"))
         {
-            SetReward(goToWallReward);
+            score = score + 1;
+            AddReward(goToWallReward);
             EndEpisode();
             // eens de nieuwe kamer binnen doe .. (moet nog coderen)
         }
@@ -175,22 +179,20 @@ public class prisonAgent : Agent
     {
         if (other.gameObject.CompareTag("goodButton"))
         {
-            SetReward(buttonReward);
+            AddReward(buttonReward);
             Destroy(Blockage);
             Blockage = null;
             doesBlockageExist = false;
 
             buttonReward = 0f;
+            distanceToButtonReward = 0f;
             goToWallReward = 12f;
-            print("button reward = " + buttonReward);
-            print("goal reward = " + goToWallReward);
-
         }
 
         // Check if the agent is colliding with any of the border triggers
         if (other.gameObject.CompareTag("borderWall"))
         {
-            SetReward(borderWallReward);
+            AddReward(borderWallReward);
             EndEpisode();
         }
     }
@@ -210,13 +212,15 @@ public class prisonAgent : Agent
 
     private void Update()
     {
-        timeSinceStart += Time.deltaTime;
+        TextScore.text = "Score = " + score;
 
-        if (timeSinceStart >= badRewardInterval)
-        {
-            SetReward(badRewardAmount);
-            timeSinceStart = 0f; // reset timeSinceStart
-            EndEpisode();
-        }
+        //timeSinceStart += Time.deltaTime;
+
+        //if (timeSinceStart >= badRewardInterval)
+        //{
+        //    AddReward(badRewardAmount);
+        //    timeSinceStart = 0f; // reset timeSinceStart
+        //    EndEpisode();
+        //}
     }
 }
