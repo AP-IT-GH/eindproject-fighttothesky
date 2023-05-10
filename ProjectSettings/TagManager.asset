@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - goToWall
+  - goodButton
+  - Ground
+  - Agent
+  - badWall
+  - borderWall
   layers:
   - Default
   - TransparentFX

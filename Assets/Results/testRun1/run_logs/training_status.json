@@ -1,0 +1,38 @@
+{
+    "PrisonAgent": {
+        "checkpoints": [
+            {
+                "steps": 123597,
+                "file_path": "results\\testRun1\\PrisonAgent\\PrisonAgent-123597.onnx",
+                "reward": -3.25,
+                "creation_time": 1683213313.1135576,
+                "auxillary_file_paths": [
+                    "results\\testRun1\\PrisonAgent\\PrisonAgent-123597.pt"
+                ]
+            },
+            {
+                "steps": 156276,
+                "file_path": "results\\testRun1\\PrisonAgent\\PrisonAgent-156276.onnx",
+                "reward": null,
+                "creation_time": 1683214207.1030052,
+                "auxillary_file_paths": [
+                    "results\\testRun1\\PrisonAgent\\PrisonAgent-156276.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 156276,
+            "file_path": "results\\testRun1\\PrisonAgent.onnx",
+            "reward": null,
+            "creation_time": 1683214207.1030052,
+            "auxillary_file_paths": [
+                "results\\testRun1\\PrisonAgent\\PrisonAgent-156276.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.28.0",
+        "torch_version": "1.10.2+cpu"
+    }
+}
