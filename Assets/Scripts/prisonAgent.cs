@@ -45,8 +45,7 @@ public class prisonAgent : Agent
         {
             Blockage = Instantiate(BlockPrefab);
             doesBlockageExist = true;
-        }
-            
+        }     
     }
 
     public override void CollectObservations(VectorSensor sensor)
