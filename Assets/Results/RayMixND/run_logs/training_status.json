@@ -1,0 +1,29 @@
+{
+    "PrisonAgentRay": {
+        "checkpoints": [
+            {
+                "steps": 201471,
+                "file_path": "results\\RayMixND\\PrisonAgentRay\\PrisonAgentRay-201471.onnx",
+                "reward": null,
+                "creation_time": 1684398448.2921953,
+                "auxillary_file_paths": [
+                    "results\\RayMixND\\PrisonAgentRay\\PrisonAgentRay-201471.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 201471,
+            "file_path": "results\\RayMixND\\PrisonAgentRay.onnx",
+            "reward": null,
+            "creation_time": 1684398448.2921953,
+            "auxillary_file_paths": [
+                "results\\RayMixND\\PrisonAgentRay\\PrisonAgentRay-201471.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
