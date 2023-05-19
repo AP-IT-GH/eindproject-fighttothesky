@@ -7,13 +7,7 @@ using Unity.MLAgents.Actuators;
 
 public class AgentRaycast : Agent
 {
-    //public GameObject Button;
-    //public GameObject Goal;
-    public GameObject[] Blockages;
-    public GameObject[] Switches;
-    public GameObject[] Walls;
-
-    public Score gameManager;
+    public Score scoreManager;
 
     private Rigidbody rb;
 
@@ -23,6 +17,9 @@ public class AgentRaycast : Agent
     public float goalReward = 0f;
     public float fallOffReward = -5f;
     public float platformReward = 0.2f;
+    public float toolReward = 0.5f;
+    public float basketReward = 0.5f;
+    public float switchReward = 1.0f;
 
     // speed & rotation
     public float speedMultiplier = 0.1f;
@@ -30,70 +27,31 @@ public class AgentRaycast : Agent
 
     // variable for etc
     private float episodeDuration = 60f; // Duration of the episode in seconds
-    private float elapsedTime = 0f;// Elapsed time since the episode started
-    private int stage = 1;
+    private float elapsedTime = 0f; // Elapsed time since the episode started
+    private Vector3 agentSpawnPosition;
+    private bool droppedOff = false;
 
     // Jump related variables
     private bool isJumping = false;
     private float jumpForce = 7.5f;
-    private float jumpCooldown = 1f;
-    private float jumpTimer = 0f;
-
-    //spawnPoints
-    private Vector3 spawnpoint1 = new Vector3(0, 0.5f, 0);
-    private Vector3 spawnpoint2 = new Vector3(12, 0.5f, 0);
-
-    private Vector3 spawnpointBlockage1 = new Vector3(5f, 3.5f, 0);
-    private Vector3 spawnpointBlockage2 = new Vector3(7f, 3.5f, 0);
-
-    private Vector3 spawnpointSwitch1 = new Vector3(8f, 3.5f, 0);
-    private Vector3 spawnpointSwitch2 = new Vector3(10f, 3.5f, 0);
-
-    private Vector3 spawnpointWall1 = new Vector3(7f, -4f, 0);
-    private Vector3 spawnpointWall2 = new Vector3(9f, -4f, 0);
-    private Vector3 spawnpointWall1up = new Vector3(7f, 3.5f, 0);
-    private Vector3 spawnpointWall2up = new Vector3(9f, 3.5f, 0);
-
-    // Distances
-    //float currentDistanceToGoal = 0;
-    //float currentDistanceToButton = 0;
-    //float currentDistanceToBlockage = 0;
-
-    //float previousDistanceToGoal;
-    //float previousDistanceToButton;
-    //float previousDistanceToBlockage;
 
     public override void Initialize()
     {
         rb = this.GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
+        GameManager.Instance.Start();
+        agentSpawnPosition = GameManager.Instance.agentSpawnPoint;
         //spawnpoint = transform.localPosition;
     }
     public override void OnEpisodeBegin()
     {
-        if (stage == 1)
-        {
-            this.transform.localPosition = spawnpoint1;
-            this.transform.localRotation = Quaternion.identity;
-        }
-        else if (stage == 2)
-        {
-            this.transform.localPosition = spawnpoint2;
-            this.transform.localRotation = Quaternion.identity;
-        }
+        this.transform.localPosition = agentSpawnPosition;
+        this.transform.localRotation = Quaternion.identity;
 
-        //BadWallExists = true;
-
-        Blockages[0].transform.localPosition = spawnpointBlockage1;
-        Blockages[1].transform.localPosition = spawnpointBlockage2;
-        Switches[0].transform.localPosition = spawnpointSwitch1;
-        Switches[1].transform.localPosition = spawnpointSwitch2;
-        Walls[0].transform.localPosition = spawnpointWall1;
-        Walls[1].transform.localPosition = spawnpointWall2;
 
         // Reset the environment and agent state
         elapsedTime = 0f;
+        droppedOff = false;
 
         // Reset rewards
         buttonReward = 4f;
@@ -101,16 +59,12 @@ public class AgentRaycast : Agent
         goalReward = 0f;
         fallOffReward = -5f;
         platformReward = 0.2f;
+        toolReward = 0.5f;
+        GameManager.Instance.Reset();
+
 
         // Reset any jump-related variables
         isJumping = false;
-        jumpTimer = 0f;
-
-        // Get distance to objects
-        //previousDistanceToGoal = Vector3.Distance(this.transform.localPosition, Goal.transform.localPosition);
-        //previousDistanceToButton = Vector3.Distance(this.transform.localPosition, Blockage.transform.localPosition);
-        //previousDistanceToBlockage = Vector3.Distance(this.transform.localPosition, Button.transform.localPosition);
-
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -121,10 +75,6 @@ public class AgentRaycast : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        //currentDistanceToGoal = Vector3.Distance(this.transform.localPosition, Goal.transform.localPosition);
-        //currentDistanceToBlockage = Vector3.Distance(this.transform.localPosition, Blockage.transform.localPosition);
-        //currentDistanceToButton = Vector3.Distance(this.transform.localPosition, Button.transform.localPosition);
-
         // Get the horizontal movement, forward/backward movement, and rotation signals
         float horizontalMovement = actionBuffers.ContinuousActions[0];
         float verticalMovement = actionBuffers.ContinuousActions[1];
@@ -134,7 +84,6 @@ public class AgentRaycast : Agent
         // Apply movement and rotation
         ApplyMovement(horizontalMovement, verticalMovement);
         ApplyRotation(rotationSignal);
-        //Jump(jumpMovement);
 
         // Handle jumping
         if (jumpMovement > 0.6)
@@ -151,147 +100,158 @@ public class AgentRaycast : Agent
             EndEpisode();
         }
 
-        {
-            // Movement Origineel
-            {
-                //    // Acties, size = 2
-                //    Vector3 controlSignal = Vector3.zero;
-                //    controlSignal.x = actionBuffers.ContinuousActions[0];
-                //    controlSignal.z = actionBuffers.ContinuousActions[1];
-                //    float rotationSignal = actionBuffers.ContinuousActions[2];
-
-                //    // move forward/back and left/right 
-                //    transform.Translate(controlSignal.x * speedMultiplier, 0f, controlSignal.z * (speedMultiplier / 2));
-
-                //    Vector3 newRotation = transform.rotation.eulerAngles;
-                //    newRotation.y += rotationSignal * rotationSpeed * Time.fixedDeltaTime;
-                //    transform.rotation = Quaternion.Euler(newRotation);
-            }
-
-            //if (BadWallExists == true)
-            //{
-            //    // negatieve beloning blockage
-            //    if (currentDistanceToBlockage < previousDistanceToBlockage)
-            //        AddReward(-0.01f);
-            //    else if (currentDistanceToBlockage > previousDistanceToBlockage)
-            //        AddReward(0.01f);
-
-            //    // beloning button
-            //    if (currentDistanceToButton < previousDistanceToButton)
-            //        AddReward(0.02f);
-            //    else if (currentDistanceToButton > previousDistanceToButton)
-            //            AddReward(-0.02f);
-            //}
-            //else if (BadWallExists == false)
-            //{
-            //    // beloning goal
-            //    if (currentDistanceToGoal < previousDistanceToGoal)
-            //        AddReward(0.02f);
-            //    else if (currentDistanceToGoal > previousDistanceToGoal)
-            //        AddReward(-0.02f);
-            //}
-        }
-
         if (this.transform.localPosition.y < 0)
         {
+            // if tool fell, reset position
+            if (GameManager.Instance.Tool.transform.localPosition.y < 0)
+                GameManager.Instance.ResetTool();
+            else if (GameManager.Instance.State == GameState.Stage5)
+                GameManager.Instance.ResetBox();
+
+            // punish for falling
             print("afgevallen");
             SetReward(fallOffReward);
             EndEpisode();
         }
-
-        //previousDistanceToGoal = currentDistanceToGoal;
-        //previousDistanceToButton = currentDistanceToButton;
-        //previousDistanceToBlockage = currentDistanceToBlockage;
+        if (GameManager.Instance.box.transform.localPosition.y < 0)
+            GameManager.Instance.ResetBox();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("blockage"))
         {
-            SetReward(badWallReward*2);
+            SetReward(badWallReward);
+            if (GameManager.Instance.State == GameState.Stage5)
+                GameManager.Instance.ResetBox();
             EndEpisode();
         }
-        else if (collision.gameObject.CompareTag("Ground"))
+        else if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("box") || collision.gameObject.CompareTag("platform"))
         {
             isJumping = false;
         }
         else if (collision.gameObject.CompareTag("platform"))
         {
             AddReward(platformReward);
+            platformReward = 0;
         }
         else if (collision.gameObject.CompareTag("tool"))
         {
-            // Stick the tool to the agent
-            collision.transform.parent = transform;
+            AddReward(toolReward);
+            toolReward = 0;
+
+            // Stick the tool to the agent if it doesn't have a tool already and hasn't been dropped off
+            if (!droppedOff && !HasTool())
+            {
+                collision.transform.parent = transform;
+                AddReward(toolReward);
+                toolReward = 0;
+            }
         }
         else if (collision.gameObject.CompareTag("basket"))
         {
-            AddReward(0.5f);
-
-            // Drop the tool if colliding with a basket
-            if (transform.childCount > 0)
+            if (HasTool())
             {
-                Transform tool = transform.GetChild(0);
-                tool.parent = null;
+                // Drop the tool if colliding with a basket and the agent has the tool
+                Transform tool = GetTool();
+                if (tool != null)
+                    tool.parent = null;
 
-                AddReward(buttonReward);
-                buttonReward = 0;
-                platformReward = 0;
-                badWallReward = 0;
-                goalReward = 7;
-                Blockages[0].transform.localPosition = new Vector3(5f, -20f, 0);
-                Blockages[1].transform.localPosition = new Vector3(7f, -20f, 0);
+                droppedOff = true;
+                GameManager.Instance.moveBlockages();
+                AddReward(basketReward);
+                basketReward = 0;
             }
         }
     }
+
+    // Alternative for Switch (bc wall moves up too fast)
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("switch"))
+    //    {
+    //        episodeDuration += 30;
+
+    //        // reset rewards per room
+    //        AddReward(switchReward);
+    //        buttonReward = 4;
+    //        platformReward = 0.2f;
+    //        toolReward = 0.5f;
+    //        basketReward = 0.5f;
+
+    //        // Change state
+    //        if (GameManager.Instance.State == GameState.Stage1)
+    //            GameManager.Instance.UpdateGameState(GameState.Stage2);
+    //        else if (GameManager.Instance.State == GameState.Stage2)
+    //            GameManager.Instance.UpdateGameState(GameState.Stage3);
+    //        else if (GameManager.Instance.State == GameState.Stage3)
+    //            GameManager.Instance.UpdateGameState(GameState.Stage4);
+    //        else if (GameManager.Instance.State == GameState.Stage4)
+    //            GameManager.Instance.UpdateGameState(GameState.Stage5);
+    //        else if (GameManager.Instance.State == GameState.Stage5)
+    //            GameManager.Instance.UpdateGameState(GameState.Stage6);
+    //    }
+    //}
+
     private void OnTriggerEnter(Collider other)
     {
 
         if (other.gameObject.CompareTag("goal"))
         {
-            gameManager.score++;
-            gameManager.UpdateScoreText();
+            // update score
+            scoreManager.score++;
+            scoreManager.UpdateScoreText();
+
+            // update rewards
             SetReward(goalReward);
             goalReward = 0;
-            buttonReward = 4;
+
             //EndEpisode();
         }
         else if (other.gameObject.CompareTag("button"))
         {
             AddReward(buttonReward);
+            GameManager.Instance.moveBlockages();
             buttonReward = 0;
-            platformReward = 0;
-            badWallReward = 0;
             goalReward = 7;
-            Blockages[0].transform.localPosition = new Vector3(5f, -20f, 0);
-            Blockages[1].transform.localPosition = new Vector3(7f, -20f, 0);
-            //BadWallExists = false;
         }
         else if (other.gameObject.CompareTag("switch"))
         {
-            stage++;
-            AddReward(0.5f);
-            Blockages[0].transform.localPosition = spawnpointBlockage1;
-            Blockages[1].transform.localPosition = spawnpointBlockage2;
+            episodeDuration += 30;
 
-            if (stage == 2)
-            {
-                Switches[0].transform.localPosition = new Vector3(5f, -20f, 0);
-                Walls[0].transform.localPosition = spawnpointWall1up;
-                spawnpointWall1 = spawnpointWall1up;
-            }
-            else if (stage == 3)
-            {
-                Switches[1].transform.localPosition = new Vector3(5f, -20f, 0);
-                Walls[1].transform.localPosition = spawnpointWall2up;
-                spawnpointWall2 = spawnpointWall2up;
-            }
-            print("stage = " + stage);
+            // reset rewards per room
+            AddReward(switchReward);
+            buttonReward = 4;
+            platformReward = 0.2f;
+            toolReward = 0.5f;
+            basketReward = 0.5f;
+            
+            // Change state
+            if (GameManager.Instance.State == GameState.Stage1)
+                GameManager.Instance.UpdateGameState(GameState.Stage2);
+            else if (GameManager.Instance.State == GameState.Stage2)
+                GameManager.Instance.UpdateGameState(GameState.Stage3);
+            else if (GameManager.Instance.State == GameState.Stage3)
+                GameManager.Instance.UpdateGameState(GameState.Stage4);
+            else if (GameManager.Instance.State == GameState.Stage4)
+                GameManager.Instance.UpdateGameState(GameState.Stage5);
+            else if (GameManager.Instance.State == GameState.Stage5)
+                GameManager.Instance.UpdateGameState(GameState.Stage6);
+            else if (GameManager.Instance.State == GameState.Stage6)
+                GameManager.Instance.UpdateGameState(GameState.Stage7);
         }
-        else if (other.gameObject.CompareTag("switch"))
+        else if (other.gameObject.CompareTag("finish"))
         {
+            // update score
+            scoreManager.score++;
+            scoreManager.UpdateScoreText();
+
             SetReward(15f);
+            GameManager.Instance.UpdateGameState(GameState.Stage1);
+            agentSpawnPosition = GameManager.Instance.agentSpawnPoint;
+            GameManager.Instance.Reset();
             EndEpisode();
+            //GameManager.Instance.UpdateGameState(GameState.Victory);
         }
     }
 
@@ -299,7 +259,7 @@ public class AgentRaycast : Agent
     private void ApplyMovement(float horizontalMovement, float verticalMovement)
     {
         // Move the agent based on input signals
-        float movementSpeed = 2f; // Adjust the movement speed as needed
+        float movementSpeed = 3f; // Adjust the movement speed as needed
         Vector3 movement = new Vector3(horizontalMovement, 0f, verticalMovement);
         movement.Normalize();
         transform.Translate(movement * Time.deltaTime * movementSpeed, Space.World);
@@ -316,15 +276,12 @@ public class AgentRaycast : Agent
     // Make the agent jump
     private void Jump()
     {
-        if (Time.time >= jumpTimer && isJumping == false)
+        if (isJumping == false)
         {
             // Apply jump force
             Rigidbody rb = GetComponent<Rigidbody>();
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-            // Set jumping flag and start jump cooldown
             isJumping = true;
-            jumpTimer = Time.time + jumpCooldown;
         }
     }
 
@@ -350,5 +307,38 @@ public class AgentRaycast : Agent
         {
             Jump();
         }
+    }
+
+    // checks if the agent has a tool as a child
+    bool HasTool()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            if (!child.CompareTag("MainCamera"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // retrieves the tool object if the agent has one
+    Transform GetTool()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            if (!child.CompareTag("MainCamera"))
+            {
+                return child;
+            }
+        }
+        return null;
+    }
+
+    private void Update()
+    {
+        agentSpawnPosition = GameManager.Instance.agentSpawnPoint;
     }
 }
