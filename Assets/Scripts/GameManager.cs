@@ -10,8 +10,10 @@ public class GameManager : MonoBehaviour
     public GameObject[] Blockages;
     public GameObject[] Switches;
     public GameObject[] Walls;
+    public GameObject[] Goals;
     public GameObject Tool;
     public GameObject box;
+    //public GameObject Agent;
     public Transform Room6;
 
     [HideInInspector]
@@ -28,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        UpdateGameState(GameState.Stage1);        
+        UpdateGameState(GameState.Stage4);        
     }
 
     public void UpdateGameState(GameState newState){
@@ -42,31 +44,37 @@ public class GameManager : MonoBehaviour
                 agentSpawnPoint = new Vector3(0, 0.5f, 0);
                 break;
             case GameState.Stage2:
+                Goals[0].transform.localPosition = new Vector3(6.5f, -20, 0);
                 Walls[0].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 agentSpawnPoint = new Vector3(12, 0.5f, 0);
                 Switches[0].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage3:
+                Goals[1].transform.localPosition = new Vector3(6.5f, -20, 0);
                 agentSpawnPoint = new Vector3(27.5f, 0.5f, 0);
                 Walls[1].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[1].transform.localPosition = new Vector3(8, -20f, 0);
                 break;
             case GameState.Stage4:
+                Goals[2].transform.localPosition = new Vector3(6.5f, -20, 0);
                 agentSpawnPoint = new Vector3(50, 0.5f, 0);
                 Walls[2].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[2].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage5:
+                Goals[3].transform.localPosition = new Vector3(6.5f, -20, 0);
                 agentSpawnPoint = new Vector3(72, 0.5f, 0);
                 Walls[3].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[3].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage6:
+                Goals[4].transform.localPosition = new Vector3(6.5f, -20, 0);
                 agentSpawnPoint = new Vector3(100, 0.5f, 0);
                 Walls[4].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[4].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage7:
+                Goals[5].transform.localPosition = new Vector3(6.5f, -20, 0);
                 agentSpawnPoint = new Vector3(130, 0.5f, 0);
                 Walls[5].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[5].transform.localPosition = new Vector3(8f, -20f, 0);
@@ -92,6 +100,8 @@ public class GameManager : MonoBehaviour
             swich.transform.localPosition = new Vector3(7f, 3.5f, 0);
         foreach (var blockage in Blockages)
             blockage.transform.localPosition = new Vector3(5f, 3.5f, 0);
+        foreach (var goal in Goals)
+            goal.transform.localPosition = new Vector3(6.5f, 3.5f, 0);
         ResetBox();
         ResetTool();
     }

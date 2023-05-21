@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Unity.MLAgents;
-using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors;
+using UnityEngine;
 
 public class AgentRaycast : Agent
 {
@@ -20,6 +18,7 @@ public class AgentRaycast : Agent
     public float toolReward = 0.5f;
     public float basketReward = 0.5f;
     public float switchReward = 1.0f;
+    public float boxReward = 0.5f;
 
     // speed & rotation
     public float speedMultiplier = 0.1f;
@@ -30,6 +29,9 @@ public class AgentRaycast : Agent
     private float elapsedTime = 0f; // Elapsed time since the episode started
     private Vector3 agentSpawnPosition;
     private bool droppedOff = false;
+
+    //private bool touchedButton = false;
+    //private bool allowMovement = true;
 
     // Jump related variables
     private bool isJumping = false;
@@ -45,6 +47,7 @@ public class AgentRaycast : Agent
     }
     public override void OnEpisodeBegin()
     {
+        GameManager.Instance.Reset();
         this.transform.localPosition = agentSpawnPosition;
         this.transform.localRotation = Quaternion.identity;
 
@@ -52,6 +55,8 @@ public class AgentRaycast : Agent
         // Reset the environment and agent state
         elapsedTime = 0f;
         droppedOff = false;
+        //allowMovement = true;
+        //touchedButton = false;
 
         // Reset rewards
         buttonReward = 4f;
@@ -60,11 +65,12 @@ public class AgentRaycast : Agent
         fallOffReward = -5f;
         platformReward = 0.2f;
         toolReward = 0.5f;
-        GameManager.Instance.Reset();
+        boxReward = 0.5f;
 
 
         // Reset any jump-related variables
         isJumping = false;
+        GameManager.Instance.UpdateGameState(GameManager.Instance.State);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -81,13 +87,20 @@ public class AgentRaycast : Agent
         float rotationSignal = actionBuffers.ContinuousActions[2];
         float jumpMovement = actionBuffers.ContinuousActions[3];
 
+        //if (allowMovement)        {
         // Apply movement and rotation
         ApplyMovement(horizontalMovement, verticalMovement);
-        ApplyRotation(rotationSignal);
 
         // Handle jumping
         if (jumpMovement > 0.6)
+        {
             Jump();
+            AddReward(-0.02f);
+        }
+
+        //}
+
+        ApplyRotation(rotationSignal);
 
         // Increase the elapsed time
         elapsedTime += Time.deltaTime;
@@ -126,7 +139,7 @@ public class AgentRaycast : Agent
                 GameManager.Instance.ResetBox();
             EndEpisode();
         }
-        else if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("box") || collision.gameObject.CompareTag("platform"))
+        else if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("box") || collision.gameObject.CompareTag("platform") )
         {
             isJumping = false;
         }
@@ -158,10 +171,27 @@ public class AgentRaycast : Agent
                     tool.parent = null;
 
                 droppedOff = true;
+
+                //if (!touchedButton)
+                //{
+                //    allowMovement = false;
+                //    touchedButton = true;
+                //}
                 GameManager.Instance.moveBlockages();
+
                 AddReward(basketReward);
                 basketReward = 0;
             }
+        }
+        else if (collision.gameObject.CompareTag("borderWall"))
+        {
+            SetReward(-0.5f);
+            EndEpisode();
+        }
+        else if (collision.gameObject.CompareTag("box"))
+        {
+            SetReward(boxReward);
+            boxReward = 0;
         }
     }
 
@@ -204,25 +234,34 @@ public class AgentRaycast : Agent
 
             // update rewards
             SetReward(goalReward);
+            //AddReward(goalReward);
             goalReward = 0;
 
-            //EndEpisode();
+            EndEpisode();
         }
         else if (other.gameObject.CompareTag("button"))
         {
             AddReward(buttonReward);
+
             GameManager.Instance.moveBlockages();
+            //if (!touchedButton)
+            //{
+            //    allowMovement = false;
+            //    touchedButton = true;
+            //}
+
             buttonReward = 0;
             goalReward = 7;
         }
         else if (other.gameObject.CompareTag("switch"))
         {
             episodeDuration += 30;
+            //touchedButton = false;
 
             // reset rewards per room
             AddReward(switchReward);
             buttonReward = 4;
-            platformReward = 0.2f;
+            platformReward = 0.4f;
             toolReward = 0.5f;
             basketReward = 0.5f;
             
@@ -242,6 +281,8 @@ public class AgentRaycast : Agent
         }
         else if (other.gameObject.CompareTag("finish"))
         {
+            //touchedButton = false;
+
             // update score
             scoreManager.score++;
             scoreManager.UpdateScoreText();
@@ -253,13 +294,18 @@ public class AgentRaycast : Agent
             EndEpisode();
             //GameManager.Instance.UpdateGameState(GameState.Victory);
         }
+        else if (other.gameObject.CompareTag("jumpPlate"))
+        {
+            //AddReward(0.2f);
+            Jump();
+        }
     }
 
     // Apply movement based on horizontal and vertical input
     private void ApplyMovement(float horizontalMovement, float verticalMovement)
     {
         // Move the agent based on input signals
-        float movementSpeed = 3f; // Adjust the movement speed as needed
+        float movementSpeed = 4f; // Adjust the movement speed as needed
         Vector3 movement = new Vector3(horizontalMovement, 0f, verticalMovement);
         movement.Normalize();
         transform.Translate(movement * Time.deltaTime * movementSpeed, Space.World);
@@ -340,5 +386,10 @@ public class AgentRaycast : Agent
     private void Update()
     {
         agentSpawnPosition = GameManager.Instance.agentSpawnPoint;
+        //if (Input.GetKey(KeyCode.N) && touchedButton)
+        //{
+        //    GameManager.Instance.moveBlockages();
+        //    allowMovement = true;
+        //}
     }
 }
