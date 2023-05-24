@@ -6,6 +6,7 @@ TagManager:
   tags:
   - goToWall
   - Ball
+  - Hand
   layers:
   - Default
   - TransparentFX
