@@ -25,7 +25,7 @@ public class AgentRaycast : Agent
     public float rotationSpeed = 5f;
 
     // variable for etc
-    private float episodeDuration = 60f; // Duration of the episode in seconds
+    private float episodeDuration = 90f; // Duration of the episode in seconds
     private float elapsedTime = 0f; // Elapsed time since the episode started
     private Vector3 agentSpawnPosition;
     private bool droppedOff = false;
@@ -192,6 +192,10 @@ public class AgentRaycast : Agent
         {
             SetReward(boxReward);
             boxReward = 0;
+        }
+        else if (collision.gameObject.CompareTag("Untagged"))
+        {
+            AddReward(-0.2f);
         }
     }
 

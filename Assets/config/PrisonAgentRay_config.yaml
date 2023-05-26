@@ -18,22 +18,22 @@ behaviors:
       lambd: 0.95
       learning_rate: 0.0003
       num_epoch: 3
-    # behavioral_cloning:
-    #   demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room4.demo'
-    #   strength: 0.3
-    #   steps: 0  
+    behavioral_cloning:
+      demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1.demo'
+      strength: 0.2
+      steps: 0  
     reward_signals:
       extrinsic:
         strength: 1
         gamma: 0.99
       gail:
-        strength: 0.7
+        strength: 0.2
         gamma: 0.99
         encoding_size: 128
         learning_rate: 3e-4
-        demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room4.demo'
+        demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1.demo'
       # curiosity:
-      #   strength: 0.1
+      #   strength: 0.3
       #   gamma: 0.8
       #   encoding_size: 256
 

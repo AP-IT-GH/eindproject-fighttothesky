@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        UpdateGameState(GameState.Stage4);        
+        UpdateGameState(GameState.Stage3);        
     }
 
     public void UpdateGameState(GameState newState){
