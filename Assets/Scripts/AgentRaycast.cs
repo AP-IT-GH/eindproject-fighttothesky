@@ -7,13 +7,12 @@ public class AgentRaycast : Agent
 {
     public Score scoreManager;
 
-    private Rigidbody rb;
 
     // rewards
     public float buttonReward = 4f;
-    public float badWallReward = -4.0f;
+    public float badWallReward = -1.0f;
     public float goalReward = 0f;
-    public float fallOffReward = -5f;
+    public float fallOffReward = -3f;
     public float platformReward = 0.2f;
     public float toolReward = 0.5f;
     public float basketReward = 0.5f;
@@ -37,13 +36,15 @@ public class AgentRaycast : Agent
     private bool isJumping = false;
     private float jumpForce = 7.5f;
 
+    private Rigidbody rb;
+
     public override void Initialize()
     {
         rb = this.GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         GameManager.Instance.Start();
         agentSpawnPosition = GameManager.Instance.agentSpawnPoint;
-        //spawnpoint = transform.localPosition;
+        GameManager.Instance.randomButtonPos();
     }
     public override void OnEpisodeBegin()
     {
@@ -60,9 +61,10 @@ public class AgentRaycast : Agent
 
         // Reset rewards
         buttonReward = 4f;
-        badWallReward = -4.0f;
+        badWallReward = -1.0f;
+        switchReward = 1.0f;
         goalReward = 0f;
-        fallOffReward = -5f;
+        fallOffReward = -3f;
         platformReward = 0.2f;
         toolReward = 0.5f;
         boxReward = 0.5f;
@@ -71,12 +73,14 @@ public class AgentRaycast : Agent
         // Reset any jump-related variables
         isJumping = false;
         GameManager.Instance.UpdateGameState(GameManager.Instance.State);
+        GameManager.Instance.randomButtonPos();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(this.transform.localPosition);
         sensor.AddObservation(rb.velocity);
+        sensor.AddObservation(GameManager.Instance.GateOpen);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -181,6 +185,7 @@ public class AgentRaycast : Agent
 
                 AddReward(basketReward);
                 basketReward = 0;
+                GameManager.Instance.SetGateTrue();
             }
         }
         else if (collision.gameObject.CompareTag("borderWall"))
@@ -253,7 +258,7 @@ public class AgentRaycast : Agent
             //    allowMovement = false;
             //    touchedButton = true;
             //}
-
+            GameManager.Instance.SetGateTrue();
             buttonReward = 0;
             goalReward = 7;
         }

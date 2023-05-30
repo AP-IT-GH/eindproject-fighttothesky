@@ -1,45 +1,45 @@
 behaviors:
   PrisonAgentRay:
-    trainer_type: ppo
-    max_steps: 5.0e7
-    time_horizon: 128
-    summary_freq: 1000
+    hyperparameters:
+      batch_size: 1024
+      beta: 0.005
+      buffer_size: 40960
+      epsilon: 0.2
+      lambd: 0.95
+      learning_rate: 0.001
+      num_epoch: 3
     network_settings:
       memory_size: 256
       num_layers: 2
       hidden_units: 512
       normalize: false
       sequence_length: 64
-    hyperparameters:
-      batch_size: 1024
-      beta: 0.01
-      buffer_size: 40960
-      epsilon: 0.2
-      lambd: 0.95
-      learning_rate: 0.0003
-      num_epoch: 3
     behavioral_cloning:
-      demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1.demo'
-      strength: 0.2
+      demo_path: Demonstrations/Room3cur.demo
+      # demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1Cur.demo'
+      strength: 0.5
       steps: 0  
     reward_signals:
       extrinsic:
         strength: 1
         gamma: 0.99
       gail:
-        strength: 0.2
+        strength: 0.5
         gamma: 0.99
         encoding_size: 128
         learning_rate: 3e-4
-        demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1.demo'
+        demo_path: Demonstrations/Room3cur.demo
+        # demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1Cur.demo'
       # curiosity:
       #   strength: 0.3
       #   gamma: 0.8
       #   encoding_size: 256
+    trainer_type: ppo
+    max_steps: 5.0e7
+    time_horizon: 128
+    summary_freq: 1000
 
 
-
-        
 # behaviors:
 #   PrisonAgentRay:
 #     trainer_type: ppo
@@ -50,18 +50,23 @@ behaviors:
 #       beta: 0.01
 #       epsilon: 0.2
 #       lambd: 0.99
-#       num_epoch: 5
+#       num_epoch: 3
 #       learning_rate_schedule: linear
 #       beta_schedule: constant
 #       epsilon_schedule: linear
 #     network_settings:
 #       normalize: false
 #       hidden_units: 128
-#       num_layers: 3
+#       num_layers: 2
 #     reward_signals:
 #       extrinsic:
-#         gamma: 0.995
+#         gamma: 0.99
 #         strength: 1.0
 #     max_steps: 5000000
 #     time_horizon: 64
 #     summary_freq: 3500
+#     keep_checkpoints: 5
+#     checkpoint_interval: 500000
+
+
+

@@ -372,9 +372,11 @@ MonoBehaviour:
   - {fileID: 861492121}
   Tool: {fileID: 1102877083}
   box: {fileID: 2044249685}
+  buttonRoom3: {fileID: 1984576719}
   Room6: {fileID: 1223227637}
   agentSpawnPoint: {x: 0, y: 0.5, z: 0}
   State: 1
+  GateOpen: 0
 --- !u!4 &159863412
 Transform:
   m_ObjectHideFlags: 0
@@ -2592,7 +2594,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 731602974}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2614,7 +2616,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Record: 0
   NumStepsToRecord: 12000
-  DemonstrationName: Room4
+  DemonstrationName: Room3Cur
   DemonstrationDirectory: 
 --- !u!114 &731602977
 MonoBehaviour:
@@ -2640,7 +2642,7 @@ MonoBehaviour:
   - basket
   m_RaysPerDirection: 6
   m_MaxRayDegrees: 70
-  m_SphereCastRadius: 0.75
+  m_SphereCastRadius: 0.27
   m_RayLength: 17
   m_RayLayerMask:
     serializedVersion: 2
@@ -2648,8 +2650,8 @@ MonoBehaviour:
   m_ObservationStacks: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 2.2
-  m_EndVerticalOffset: -2
+  m_StartVerticalOffset: 6.5
+  m_EndVerticalOffset: -10
 --- !u!114 &731602978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2711,7 +2713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 6
+    VectorObservationSize: 7
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 4
@@ -4252,7 +4254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &1336347514
 AudioListener:
   m_ObjectHideFlags: 0
@@ -4312,7 +4314,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1336347513}
   m_LocalRotation: {x: 0.21481141, y: 0.04846128, z: -0.010672669, w: 0.9753941}
-  m_LocalPosition: {x: 10.05, y: 13.87, z: -20.33}
+  m_LocalPosition: {x: 24.62, y: 13.87, z: -20.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5138,7 +5140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1914005766
 Transform:
   m_ObjectHideFlags: 0
@@ -5549,7 +5551,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984576719}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.28, y: 0.04, z: -5.99}
+  m_LocalPosition: {x: -15.67, y: 0.04, z: 0}
   m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 601056155}

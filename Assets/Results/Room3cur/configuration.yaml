@@ -5,8 +5,8 @@ behaviors:
     hyperparameters:
       batch_size: 1024
       buffer_size: 40960
-      learning_rate: 0.0003
-      beta: 0.01
+      learning_rate: 0.001
+      beta: 0.005
       epsilon: 0.2
       lambd: 0.95
       num_epoch: 3
@@ -35,7 +35,7 @@ behaviors:
           deterministic: false
       gail:
         gamma: 0.99
-        strength: 0.2
+        strength: 0.01
         network_settings:
           normalize: false
           hidden_units: 128
@@ -48,7 +48,7 @@ behaviors:
         encoding_size: 128
         use_actions: false
         use_vail: false
-        demo_path: C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1.demo
+        demo_path: C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1Cur.demo
     init_path: null
     keep_checkpoints: 5
     checkpoint_interval: 500000
@@ -58,9 +58,9 @@ behaviors:
     threaded: false
     self_play: null
     behavioral_cloning:
-      demo_path: C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1.demo
+      demo_path: C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1Cur.demo
       steps: 0
-      strength: 0.2
+      strength: 0.01
       samples_per_update: 0
       num_epoch: null
       batch_size: null
@@ -87,8 +87,8 @@ checkpoint_settings:
   run_id: Room3cur
   initialize_from: null
   load_model: false
-  resume: false
-  force: true
+  resume: true
+  force: false
   train_model: false
   inference: false
   results_dir: results

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,7 +14,14 @@ public class GameManager : MonoBehaviour
     public GameObject[] Goals;
     public GameObject Tool;
     public GameObject box;
-    //public GameObject Agent;
+    public GameObject buttonRoom3;
+    private Vector3[] spawnPositions = new Vector3[]
+    {
+        new Vector3(-10, 0.04f, -6),
+        new Vector3(-15, 0.04f, 0),
+        new Vector3(-13f, 0.04f, 3)
+    };
+
     public Transform Room6;
 
     [HideInInspector]
@@ -21,6 +29,9 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public GameState State;
+
+    [HideInInspector]
+    public bool GateOpen;
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -30,7 +41,9 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        UpdateGameState(GameState.Stage3);        
+        UpdateGameState(GameState.Stage3);
+        GateOpen = false;
+        randomButtonPos();
     }
 
     public void UpdateGameState(GameState newState){
@@ -54,6 +67,7 @@ public class GameManager : MonoBehaviour
                 agentSpawnPoint = new Vector3(27.5f, 0.5f, 0);
                 Walls[1].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[1].transform.localPosition = new Vector3(8, -20f, 0);
+                randomButtonPos();
                 break;
             case GameState.Stage4:
                 Goals[2].transform.localPosition = new Vector3(6.5f, -20, 0);
@@ -102,6 +116,8 @@ public class GameManager : MonoBehaviour
             blockage.transform.localPosition = new Vector3(5f, 3.5f, 0);
         foreach (var goal in Goals)
             goal.transform.localPosition = new Vector3(6.5f, 3.5f, 0);
+
+        GateOpen = false;
         ResetBox();
         ResetTool();
     }
@@ -151,6 +167,19 @@ public class GameManager : MonoBehaviour
     public void ResetBox()
     {
         box.transform.localPosition = new Vector3(-5, 1, -3);
+    }
+
+    public void SetGateTrue()
+    {
+        if (!GateOpen)
+            GateOpen = true;
+    }
+
+    public void randomButtonPos()
+    {
+        int randomIndex = Random.Range(0, spawnPositions.Length);
+        Vector3 spawnPosition = spawnPositions[randomIndex];
+        buttonRoom3.transform.localPosition = spawnPosition;
     }
 }
 
