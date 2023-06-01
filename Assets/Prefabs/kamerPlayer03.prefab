@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 1084577221831990542}
   - component: {fileID: 8268291635456582743}
   - component: {fileID: 25752132450238085}
+  - component: {fileID: 7170608192975274552}
   m_Layer: 0
   m_Name: Socket Interactor_hexagon
   m_TagString: Untagged
@@ -181,8 +182,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7132005556667375624}
-  m_Father: {fileID: 1241657305521555705}
-  m_RootOrder: 10
+  m_Father: {fileID: 4941685209811872191}
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &8268291635456582743
 SphereCollider:
@@ -245,6 +246,20 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+--- !u!114 &7170608192975274552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520837298877873689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9eccf05cfb1c042a6cebc7d030f24b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  puzzleManager: {fileID: 2523883593376609089}
+  correctPuzzlePiece: {fileID: 5010631411182875198}
 --- !u!1 &609416965211930596
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,7 +287,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 609416965211930596}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.711868, y: 0.4999988, z: 0.462}
+  m_LocalPosition: {x: 4, y: 0.6, z: 2.498}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 7811271402907609632}
@@ -517,6 +532,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4941685209811872191}
+  - component: {fileID: 2523883593376609089}
   m_Layer: 0
   m_Name: Puzzle
   m_TagString: Untagged
@@ -542,9 +558,29 @@ Transform:
   - {fileID: 5878049919365559742}
   - {fileID: 5010631411182875198}
   - {fileID: 1793679660465554553}
+  - {fileID: 7973501915502178205}
+  - {fileID: 4739419568187342997}
+  - {fileID: 7776292675253837102}
+  - {fileID: 1549288641184647425}
+  - {fileID: 471762089068388652}
+  - {fileID: 1084577221831990542}
   m_Father: {fileID: 1241657305521555705}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2523883593376609089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712969014911152491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d590cdc2d6ca584a9cc6d84bcfd529a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numOfTasksToComplete: 6
+  WallToDestroy: {fileID: 3012648119136637611}
 --- !u!1 &757374582856060707
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,12 +613,6 @@ Transform:
   - {fileID: 4941685209811872191}
   - {fileID: 7607546480264218467}
   - {fileID: 7279658933589836487}
-  - {fileID: 7973501915502178205}
-  - {fileID: 4739419568187342997}
-  - {fileID: 7776292675253837102}
-  - {fileID: 1549288641184647425}
-  - {fileID: 471762089068388652}
-  - {fileID: 1084577221831990542}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -613,7 +643,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758334496002841730}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.1232677, y: 0.49999976, z: 5.847095}
+  m_LocalPosition: {x: 4, y: 0.6, z: -0.338}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 7127374046980784661}
@@ -765,6 +795,7 @@ GameObject:
   - component: {fileID: 471762089068388652}
   - component: {fileID: 8893510774804615928}
   - component: {fileID: 7851091734302376294}
+  - component: {fileID: 106427656665301370}
   m_Layer: 0
   m_Name: Socket Interactor_cillinder
   m_TagString: Untagged
@@ -784,8 +815,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1016013156329453633}
-  m_Father: {fileID: 1241657305521555705}
-  m_RootOrder: 9
+  m_Father: {fileID: 4941685209811872191}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &8893510774804615928
 SphereCollider:
@@ -848,6 +879,20 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+--- !u!114 &106427656665301370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032887996874651173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9eccf05cfb1c042a6cebc7d030f24b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  puzzleManager: {fileID: 2523883593376609089}
+  correctPuzzlePiece: {fileID: 5878049919365559742}
 --- !u!1 &1206297291872046098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,7 +1300,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1928808168955467095}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.2722981, y: 1.08, z: 2.3967829}
+  m_LocalPosition: {x: 4, y: 0.6, z: 0.644}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 1070520233533051818}
@@ -2502,7 +2547,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3567816092102289905}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.9550781, y: 0.61260355, z: 3.4561856}
+  m_LocalPosition: {x: 4, y: 0.6, z: 3.5}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 6877653809479316985}
@@ -3079,7 +3124,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5351834101140357357}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.7956052, y: 0.5, z: 4.4668446}
+  m_LocalPosition: {x: 4, y: 0.6, z: 1.606}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 6778535659419742981}
@@ -3326,6 +3371,7 @@ GameObject:
   - component: {fileID: 4739419568187342997}
   - component: {fileID: 37144380611072834}
   - component: {fileID: 7274471071263259590}
+  - component: {fileID: 9014443177189364131}
   m_Layer: 0
   m_Name: Socket Interactor_ball
   m_TagString: Untagged
@@ -3345,8 +3391,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6889326288621126588}
-  m_Father: {fileID: 1241657305521555705}
-  m_RootOrder: 6
+  m_Father: {fileID: 4941685209811872191}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &37144380611072834
 SphereCollider:
@@ -3409,6 +3455,20 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+--- !u!114 &9014443177189364131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6078156125932454920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9eccf05cfb1c042a6cebc7d030f24b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  puzzleManager: {fileID: 2523883593376609089}
+  correctPuzzlePiece: {fileID: 3352589783996813007}
 --- !u!1 &6326970854720104745
 GameObject:
   m_ObjectHideFlags: 0
@@ -3420,6 +3480,7 @@ GameObject:
   - component: {fileID: 7776292675253837102}
   - component: {fileID: 7592140172871995744}
   - component: {fileID: 1536688085658572101}
+  - component: {fileID: 5458639174126305495}
   m_Layer: 0
   m_Name: Socket Interactor_square
   m_TagString: Untagged
@@ -3439,8 +3500,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3435106080321712458}
-  m_Father: {fileID: 1241657305521555705}
-  m_RootOrder: 7
+  m_Father: {fileID: 4941685209811872191}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &7592140172871995744
 SphereCollider:
@@ -3503,6 +3564,20 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+--- !u!114 &5458639174126305495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6326970854720104745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9eccf05cfb1c042a6cebc7d030f24b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  puzzleManager: {fileID: 2523883593376609089}
+  correctPuzzlePiece: {fileID: 3146314281130447076}
 --- !u!1 &6640648010693671274
 GameObject:
   m_ObjectHideFlags: 0
@@ -3654,6 +3729,7 @@ GameObject:
   - component: {fileID: 1549288641184647425}
   - component: {fileID: 5458267358831468675}
   - component: {fileID: 8122478946387036998}
+  - component: {fileID: 8957499607868002284}
   m_Layer: 0
   m_Name: Socket Interactor_triangle
   m_TagString: Untagged
@@ -3673,8 +3749,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5854339962435493239}
-  m_Father: {fileID: 1241657305521555705}
-  m_RootOrder: 8
+  m_Father: {fileID: 4941685209811872191}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &5458267358831468675
 SphereCollider:
@@ -3737,6 +3813,20 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+--- !u!114 &8957499607868002284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6995293508089467608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9eccf05cfb1c042a6cebc7d030f24b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  puzzleManager: {fileID: 2523883593376609089}
+  correctPuzzlePiece: {fileID: 3872292515232331437}
 --- !u!1 &7311556580459004799
 GameObject:
   m_ObjectHideFlags: 0
@@ -3936,6 +4026,7 @@ GameObject:
   - component: {fileID: 7973501915502178205}
   - component: {fileID: 1314758475785846052}
   - component: {fileID: 8673505889188575415}
+  - component: {fileID: 6135838365898614530}
   m_Layer: 0
   m_Name: Socket Interactor_star
   m_TagString: Untagged
@@ -3955,8 +4046,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7469090958511653961}
-  m_Father: {fileID: 1241657305521555705}
-  m_RootOrder: 5
+  m_Father: {fileID: 4941685209811872191}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &1314758475785846052
 SphereCollider:
@@ -4019,6 +4110,20 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+--- !u!114 &6135838365898614530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7821324365222560327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9eccf05cfb1c042a6cebc7d030f24b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  puzzleManager: {fileID: 2523883593376609089}
+  correctPuzzlePiece: {fileID: 8767190221104479048}
 --- !u!1 &7829321845414032604
 GameObject:
   m_ObjectHideFlags: 0
@@ -4753,7 +4858,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8619529825430654547}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.44974327, y: 0.4330126, z: 3.9938352}
+  m_LocalPosition: {x: 4, y: 0.6, z: -1.422}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 595136821924172057}
