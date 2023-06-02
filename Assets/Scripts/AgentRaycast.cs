@@ -46,8 +46,8 @@ public class AgentRaycast : Agent
         gameManager.Start();
         agentSpawnPosition = gameManager.agentSpawnPoint;
 
-        if (gameManager.State == GameState.Stage3)
-            gameManager.randomButtonPos();
+        //if (gameManager.State == GameState.Stage3)
+        //    gameManager.randomButtonPos();
     }
     public override void OnEpisodeBegin()
     {
@@ -83,6 +83,8 @@ public class AgentRaycast : Agent
 
         if (gameManager.State == GameState.Stage3)
             gameManager.randomButtonPos();
+        else if (gameManager.State == GameState.Stage1)
+            gameManager.randomButtonPosS1();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -201,7 +203,7 @@ public class AgentRaycast : Agent
         }
         else if (collision.gameObject.CompareTag("borderWall"))
         {
-            SetReward(-0.5f);
+            SetReward(-1.5f);
             EndEpisode();
         }
         else if (collision.gameObject.CompareTag("box"))

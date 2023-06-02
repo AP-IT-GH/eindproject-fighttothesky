@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject Tool;
     public GameObject box;
     public GameObject buttonRoom3;
+    public GameObject buttonRoom1;
     public GameObject Agent;
 
     
@@ -25,11 +26,19 @@ public class GameManager : MonoBehaviour
         new Vector3(-20, 0.75f, -5),
     };
 
+    private Vector3[] spawnPositionsButtonS1 = new Vector3[]
+    {
+        new Vector3(-8, 0.04f, -5),
+        new Vector3(-1, 0.04f, -5),
+        new Vector3(-8, 0.04f, 4),
+    };
+
     private Vector3[] spawnPositionsButtonS3 = new Vector3[]
     {
-        new Vector3(-10, 0.04f, -6),
-        new Vector3(-15, 0.04f, 0),
-        new Vector3(-13f, 0.04f, 3)
+        new Vector3(-14, 0.04f, -14),
+        new Vector3(-8f, 0.04f, -15),
+        new Vector3(-14, 0.04f, 14),
+        new Vector3(-8f, 0.04f, 15)
     };
 
     public Transform Room6;
@@ -330,6 +339,12 @@ public class GameManager : MonoBehaviour
         int randomIndex = Random.Range(0, spawnPositionsButtonS3.Length);
         Vector3 spawnPosition = spawnPositionsButtonS3[randomIndex];
         buttonRoom3.transform.localPosition = spawnPosition;
+    }
+    public void randomButtonPosS1()
+    {
+        int randomIndex = Random.Range(0, spawnPositionsButtonS1.Length);
+        Vector3 spawnPosition = spawnPositionsButtonS1[randomIndex];
+        buttonRoom1.transform.localPosition = spawnPosition;
     }
 }
 
