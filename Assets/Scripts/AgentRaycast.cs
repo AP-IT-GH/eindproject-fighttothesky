@@ -367,9 +367,11 @@ public class AgentRaycast : Agent
         continuousActionsOut[2] = Input.GetAxis("Rotation");
 
         // Get the discrete action from input for jumping
-        var discreteActionsOut = actionsOut.DiscreteActions;
-        discreteActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1 : 0;
-        if (discreteActionsOut[0] == 1)
+        float jumpInput = Input.GetKey(KeyCode.Space) ? 1f : 0f;
+        continuousActionsOut[3] = jumpInput;
+
+        // If jump input is above 0.6, trigger jump
+        if (jumpInput > 0.6f)
         {
             Jump();
         }

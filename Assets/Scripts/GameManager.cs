@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject Tool;
     public GameObject box;
     public GameObject buttonRoom3;
+    public GameObject Agent;
 
     
     private Vector3[] spawnPositionsToolS6 = new Vector3[]
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        UpdateGameState(GameState.Stage6);
+        UpdateGameState(GameState.Stage5);
         GateOpen = false;
 
         if (State == GameState.Stage3)
@@ -90,7 +91,14 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Stage5:
                 Goals[3].transform.localPosition = new Vector3(6.5f, -20, 0);
-                agentSpawnPoint = new Vector3(72, 0.5f, 0);
+                //agentSpawnPoint = new Vector3(72, 0.5f, 0);
+
+                //for training
+                RandomSpawnS5();
+                int rotationIndex = Random.Range(0, 4);
+                float yRotation = rotationIndex * 90f;
+                Agent.transform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
+
                 Walls[3].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[3].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
@@ -119,6 +127,23 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(newState);
     }
 
+    private void RandomSpawnS5()
+    {
+        int spawnIndex = Random.Range(0, 3);
+        switch (spawnIndex)
+        {
+            case 0:
+                agentSpawnPoint = new Vector3(72, 0.5f, 0);
+                break;
+            case 1:
+                agentSpawnPoint = new Vector3(72, 0.5f, 3.5f);
+                break;
+            case 2:
+                agentSpawnPoint = new Vector3(72, 0.5f, -4f);
+                break;
+        }
+    }
+
     public void Reset()
     {
         foreach (var wall in Walls)
@@ -133,6 +158,9 @@ public class GameManager : MonoBehaviour
         GateOpen = false;
         ResetBox();
         ResetTool();
+
+        if (State == GameState.Stage5)
+            RandomSpawnS5();
     }
 
     public void moveBlockages()
