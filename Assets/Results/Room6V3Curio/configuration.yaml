@@ -3,8 +3,8 @@ behaviors:
   PrisonAgentRay:
     trainer_type: ppo
     hyperparameters:
-      batch_size: 1012
-      buffer_size: 20240
+      batch_size: 3036
+      buffer_size: 45540
       learning_rate: 0.0005
       beta: 0.01
       epsilon: 0.2
@@ -51,7 +51,7 @@ behaviors:
         demo_path: ../Demos/Room6V2.demo
       curiosity:
         gamma: 0.99
-        strength: 0.1
+        strength: 0.5
         network_settings:
           normalize: false
           hidden_units: 128

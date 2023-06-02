@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        UpdateGameState(GameState.Stage5);
+        UpdateGameState(GameState.Stage6);
         GateOpen = false;
 
         if (State == GameState.Stage3)
@@ -62,6 +62,9 @@ public class GameManager : MonoBehaviour
 
     public void UpdateGameState(GameState newState){
         State = newState;
+        int rotationIndex = Random.Range(0, 4);
+        float yRotation = rotationIndex * 90f;
+        Agent.transform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
 
         switch (newState)
         {
@@ -95,16 +98,17 @@ public class GameManager : MonoBehaviour
 
                 //for training
                 RandomSpawnS5();
-                int rotationIndex = Random.Range(0, 4);
-                float yRotation = rotationIndex * 90f;
-                Agent.transform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
 
                 Walls[3].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[3].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage6:
                 Goals[4].transform.localPosition = new Vector3(6.5f, -20, 0);
-                agentSpawnPoint = new Vector3(100, 0.5f, 0);
+                //agentSpawnPoint = new Vector3(100, 0.5f, 0);
+
+                //for training
+                RandomSpawnS6();
+
                 Walls[4].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[4].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
@@ -140,6 +144,23 @@ public class GameManager : MonoBehaviour
                 break;
             case 2:
                 agentSpawnPoint = new Vector3(72, 0.5f, -4f);
+                break;
+        }
+    }
+
+    private void RandomSpawnS6()
+    {
+        int spawnIndex = Random.Range(0, 3);
+        switch (spawnIndex)
+        {
+            case 0:
+                agentSpawnPoint = new Vector3(100, 0.5f, 0);
+                break;
+            case 1:
+                agentSpawnPoint = new Vector3(115, 0.5f, 3.5f);
+                break;
+            case 2:
+                agentSpawnPoint = new Vector3(107.5f, 0.5f, -4f);
                 break;
         }
     }
