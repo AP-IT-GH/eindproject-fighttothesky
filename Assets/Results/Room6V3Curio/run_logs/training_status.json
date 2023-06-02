@@ -1,0 +1,65 @@
+{
+    "PrisonAgentRay": {
+        "checkpoints": [
+            {
+                "steps": 499938,
+                "file_path": "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-499938.onnx",
+                "reward": -1.854761727863834,
+                "creation_time": 1685702425.0171049,
+                "auxillary_file_paths": [
+                    "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-499938.pt"
+                ]
+            },
+            {
+                "steps": 999936,
+                "file_path": "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-999936.onnx",
+                "reward": -0.7599999656279882,
+                "creation_time": 1685704034.6897142,
+                "auxillary_file_paths": [
+                    "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-999936.pt"
+                ]
+            },
+            {
+                "steps": 1269437,
+                "file_path": "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-1269437.onnx",
+                "reward": 0.8689655985297828,
+                "creation_time": 1685704944.3554544,
+                "auxillary_file_paths": [
+                    "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-1269437.pt"
+                ]
+            },
+            {
+                "steps": 1499965,
+                "file_path": "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-1499965.onnx",
+                "reward": 10.664000074863434,
+                "creation_time": 1685705718.383696,
+                "auxillary_file_paths": [
+                    "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-1499965.pt"
+                ]
+            },
+            {
+                "steps": 1876340,
+                "file_path": "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-1876340.onnx",
+                "reward": 19.530769196349187,
+                "creation_time": 1685706987.8015084,
+                "auxillary_file_paths": [
+                    "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-1876340.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1876340,
+            "file_path": "results\\Room6V3Curio\\PrisonAgentRay.onnx",
+            "reward": 19.530769196349187,
+            "creation_time": 1685706987.8015084,
+            "auxillary_file_paths": [
+                "results\\Room6V3Curio\\PrisonAgentRay\\PrisonAgentRay-1876340.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

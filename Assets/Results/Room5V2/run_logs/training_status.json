@@ -1,0 +1,38 @@
+{
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.1+cu110"
+    },
+    "PrisonAgentRay": {
+        "checkpoints": [
+            {
+                "steps": 139784,
+                "file_path": "results\\Room5V2\\PrisonAgentRay\\PrisonAgentRay-139784.onnx",
+                "reward": -2.711564569600991,
+                "creation_time": 1685640947.8697505,
+                "auxillary_file_paths": [
+                    "results\\Room5V2\\PrisonAgentRay\\PrisonAgentRay-139784.pt"
+                ]
+            },
+            {
+                "steps": 480286,
+                "file_path": "results\\Room5V2\\PrisonAgentRay\\PrisonAgentRay-480286.onnx",
+                "reward": -2.674037500693578,
+                "creation_time": 1685645545.5995793,
+                "auxillary_file_paths": [
+                    "results\\Room5V2\\PrisonAgentRay\\PrisonAgentRay-480286.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 480286,
+            "file_path": "results\\Room5V2\\PrisonAgentRay.onnx",
+            "reward": -2.674037500693578,
+            "creation_time": 1685645545.5995793,
+            "auxillary_file_paths": [
+                "results\\Room5V2\\PrisonAgentRay\\PrisonAgentRay-480286.pt"
+            ]
+        }
+    }
+}

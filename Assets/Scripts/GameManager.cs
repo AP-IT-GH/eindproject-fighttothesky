@@ -15,7 +15,16 @@ public class GameManager : MonoBehaviour
     public GameObject Tool;
     public GameObject box;
     public GameObject buttonRoom3;
-    private Vector3[] spawnPositions = new Vector3[]
+
+    
+    private Vector3[] spawnPositionsToolS6 = new Vector3[]
+    {
+        new Vector3(-12, 0.75f, 13),
+        new Vector3(-12, 0.75f, 4),
+        new Vector3(-20, 0.75f, -5),
+    };
+
+    private Vector3[] spawnPositionsButtonS3 = new Vector3[]
     {
         new Vector3(-10, 0.04f, -6),
         new Vector3(-15, 0.04f, 0),
@@ -41,9 +50,13 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        UpdateGameState(GameState.Stage3);
+        UpdateGameState(GameState.Stage6);
         GateOpen = false;
-        randomButtonPos();
+
+        if (State == GameState.Stage3)
+            randomButtonPos();
+        else if (State == GameState.Stage6)
+            ResetTool();
     }
 
     public void UpdateGameState(GameState newState){
@@ -160,7 +173,9 @@ public class GameManager : MonoBehaviour
 
     public void ResetTool()
     {
-        Tool.transform.localPosition = new Vector3(-12, 0.75f, 21);
+        int randomIndex = Random.Range(0, spawnPositionsToolS6.Length);
+        Vector3 spawnPosition = spawnPositionsToolS6[randomIndex];
+        Tool.transform.localPosition = spawnPosition;
         Tool.transform.parent = Room6.transform;
     }
 
@@ -177,8 +192,8 @@ public class GameManager : MonoBehaviour
 
     public void randomButtonPos()
     {
-        int randomIndex = Random.Range(0, spawnPositions.Length);
-        Vector3 spawnPosition = spawnPositions[randomIndex];
+        int randomIndex = Random.Range(0, spawnPositionsButtonS3.Length);
+        Vector3 spawnPosition = spawnPositionsButtonS3[randomIndex];
         buttonRoom3.transform.localPosition = spawnPosition;
     }
 }

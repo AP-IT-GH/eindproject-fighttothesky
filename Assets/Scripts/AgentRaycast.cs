@@ -6,6 +6,7 @@ using UnityEngine;
 public class AgentRaycast : Agent
 {
     public Score scoreManager;
+    public GameManager gameManager;
 
 
     // rewards
@@ -14,14 +15,14 @@ public class AgentRaycast : Agent
     public float goalReward = 0f;
     public float fallOffReward = -3f;
     public float platformReward = 0.2f;
-    public float toolReward = 0.5f;
-    public float basketReward = 0.5f;
+    public float toolReward = 1.5f;
+    public float basketReward = 3f;
     public float switchReward = 1.0f;
     public float boxReward = 0.5f;
 
     // speed & rotation
-    public float speedMultiplier = 0.1f;
-    public float rotationSpeed = 5f;
+    public float speedMultiplier = 0.3f;
+    public float rotationSpeed = 10f;
 
     // variable for etc
     private float episodeDuration = 90f; // Duration of the episode in seconds
@@ -42,13 +43,15 @@ public class AgentRaycast : Agent
     {
         rb = this.GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        GameManager.Instance.Start();
-        agentSpawnPosition = GameManager.Instance.agentSpawnPoint;
-        GameManager.Instance.randomButtonPos();
+        gameManager.Start();
+        agentSpawnPosition = gameManager.agentSpawnPoint;
+
+        if (gameManager.State == GameState.Stage3)
+            gameManager.randomButtonPos();
     }
     public override void OnEpisodeBegin()
     {
-        GameManager.Instance.Reset();
+        gameManager.Reset();
         this.transform.localPosition = agentSpawnPosition;
         this.transform.localRotation = Quaternion.identity;
 
@@ -66,21 +69,27 @@ public class AgentRaycast : Agent
         goalReward = 0f;
         fallOffReward = -3f;
         platformReward = 0.2f;
-        toolReward = 0.5f;
+        toolReward = 1.5f;
         boxReward = 0.5f;
+        basketReward = 3.0f;
 
+
+        if (gameManager.State == GameState.Stage6)
+            gameManager.ResetTool();
 
         // Reset any jump-related variables
         isJumping = false;
-        GameManager.Instance.UpdateGameState(GameManager.Instance.State);
-        GameManager.Instance.randomButtonPos();
+        gameManager.UpdateGameState(gameManager.State);
+
+        if (gameManager.State == GameState.Stage3)
+            gameManager.randomButtonPos();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(this.transform.localPosition);
         sensor.AddObservation(rb.velocity);
-        sensor.AddObservation(GameManager.Instance.GateOpen);
+        sensor.AddObservation(gameManager.GateOpen);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -120,18 +129,18 @@ public class AgentRaycast : Agent
         if (this.transform.localPosition.y < 0)
         {
             // if tool fell, reset position
-            if (GameManager.Instance.Tool.transform.localPosition.y < 0)
-                GameManager.Instance.ResetTool();
-            else if (GameManager.Instance.State == GameState.Stage5)
-                GameManager.Instance.ResetBox();
+            if (gameManager.Tool.transform.localPosition.y < 0)
+                gameManager.ResetTool();
+            else if (gameManager.State == GameState.Stage5)
+                gameManager.ResetBox();
 
             // punish for falling
             print("afgevallen");
             SetReward(fallOffReward);
             EndEpisode();
         }
-        if (GameManager.Instance.box.transform.localPosition.y < 0)
-            GameManager.Instance.ResetBox();
+        if (gameManager.box.transform.localPosition.y < 0)
+            gameManager.ResetBox();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -139,8 +148,8 @@ public class AgentRaycast : Agent
         if (collision.gameObject.CompareTag("blockage"))
         {
             SetReward(badWallReward);
-            if (GameManager.Instance.State == GameState.Stage5)
-                GameManager.Instance.ResetBox();
+            if (gameManager.State == GameState.Stage5)
+                gameManager.ResetBox();
             EndEpisode();
         }
         else if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("box") || collision.gameObject.CompareTag("platform") )
@@ -161,6 +170,7 @@ public class AgentRaycast : Agent
             if (!droppedOff && !HasTool())
             {
                 collision.transform.parent = transform;
+                toolReward = 0.5f;
                 AddReward(toolReward);
                 toolReward = 0;
             }
@@ -181,11 +191,12 @@ public class AgentRaycast : Agent
                 //    allowMovement = false;
                 //    touchedButton = true;
                 //}
-                GameManager.Instance.moveBlockages();
+                gameManager.moveBlockages();
 
                 AddReward(basketReward);
                 basketReward = 0;
-                GameManager.Instance.SetGateTrue();
+                gameManager.SetGateTrue();
+                goalReward = 15;
             }
         }
         else if (collision.gameObject.CompareTag("borderWall"))
@@ -252,15 +263,15 @@ public class AgentRaycast : Agent
         {
             AddReward(buttonReward);
 
-            GameManager.Instance.moveBlockages();
+            gameManager.moveBlockages();
             //if (!touchedButton)
             //{
             //    allowMovement = false;
             //    touchedButton = true;
             //}
-            GameManager.Instance.SetGateTrue();
+            gameManager.SetGateTrue();
             buttonReward = 0;
-            goalReward = 7;
+            goalReward = 15;
         }
         else if (other.gameObject.CompareTag("switch"))
         {
@@ -275,18 +286,18 @@ public class AgentRaycast : Agent
             basketReward = 0.5f;
             
             // Change state
-            if (GameManager.Instance.State == GameState.Stage1)
-                GameManager.Instance.UpdateGameState(GameState.Stage2);
-            else if (GameManager.Instance.State == GameState.Stage2)
-                GameManager.Instance.UpdateGameState(GameState.Stage3);
-            else if (GameManager.Instance.State == GameState.Stage3)
-                GameManager.Instance.UpdateGameState(GameState.Stage4);
-            else if (GameManager.Instance.State == GameState.Stage4)
-                GameManager.Instance.UpdateGameState(GameState.Stage5);
-            else if (GameManager.Instance.State == GameState.Stage5)
-                GameManager.Instance.UpdateGameState(GameState.Stage6);
-            else if (GameManager.Instance.State == GameState.Stage6)
-                GameManager.Instance.UpdateGameState(GameState.Stage7);
+            if (gameManager.State == GameState.Stage1)
+                gameManager.UpdateGameState(GameState.Stage2);
+            else if (gameManager.State == GameState.Stage2)
+                gameManager.UpdateGameState(GameState.Stage3);
+            else if (gameManager.State == GameState.Stage3)
+                gameManager.UpdateGameState(GameState.Stage4);
+            else if (gameManager.State == GameState.Stage4)
+                gameManager.UpdateGameState(GameState.Stage5);
+            else if (gameManager.State == GameState.Stage5)
+                gameManager.UpdateGameState(GameState.Stage6);
+            else if (gameManager.State == GameState.Stage6)
+                gameManager.UpdateGameState(GameState.Stage7);
         }
         else if (other.gameObject.CompareTag("finish"))
         {
@@ -297,9 +308,9 @@ public class AgentRaycast : Agent
             scoreManager.UpdateScoreText();
 
             SetReward(15f);
-            GameManager.Instance.UpdateGameState(GameState.Stage1);
-            agentSpawnPosition = GameManager.Instance.agentSpawnPoint;
-            GameManager.Instance.Reset();
+            gameManager.UpdateGameState(GameState.Stage1);
+            agentSpawnPosition = gameManager.agentSpawnPoint;
+            gameManager.Reset();
             EndEpisode();
             //GameManager.Instance.UpdateGameState(GameState.Victory);
         }
@@ -374,6 +385,7 @@ public class AgentRaycast : Agent
             {
                 return true;
             }
+
         }
         return false;
     }
@@ -394,7 +406,7 @@ public class AgentRaycast : Agent
 
     private void Update()
     {
-        agentSpawnPosition = GameManager.Instance.agentSpawnPoint;
+        agentSpawnPosition = gameManager.agentSpawnPoint;
         //if (Input.GetKey(KeyCode.N) && touchedButton)
         //{
         //    GameManager.Instance.moveBlockages();
