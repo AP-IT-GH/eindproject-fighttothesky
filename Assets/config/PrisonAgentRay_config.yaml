@@ -17,7 +17,7 @@ behaviors:
       vis_encode_type: simple
     behavioral_cloning:
       # demo_path: Demonstrations/Room5.demo
-      demo_path: ../Demos/Room6V2.demo
+      demo_path: ../Demos/Room4V1.demo
       # demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1Cur.demo'
       strength: 1.0
       steps: 150000
@@ -37,7 +37,7 @@ behaviors:
         learning_rate: 0.0003
         use_actions: false
         use_vail: false
-        demo_path: ../Demos/Room6V2.demo
+        demo_path: ../Demos/Room4V1.demo
         # demo_path: Demonstrations/Room5.demo
         # demo_path: 'C:\Temp\Y4 S2\VR\Create-with-VR_2020LTS\Eindproject -jailbreaker\Assets\Demonstrations\Room1Cur.demo'
       curiosity:

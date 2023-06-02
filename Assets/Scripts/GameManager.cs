@@ -51,13 +51,13 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        UpdateGameState(GameState.Stage6);
+        UpdateGameState(GameState.Stage3);
         GateOpen = false;
 
-        if (State == GameState.Stage3)
-            randomButtonPos();
-        else if (State == GameState.Stage6)
-            ResetTool();
+        //if (State == GameState.Stage3)
+        //    randomButtonPos();
+        //else if (State == GameState.Stage6)
+        //    ResetTool();
     }
 
     public void UpdateGameState(GameState newState){
@@ -71,24 +71,40 @@ public class GameManager : MonoBehaviour
             case GameState.Start:
                 break;
             case GameState.Stage1:
-                agentSpawnPoint = new Vector3(0, 0.5f, 0);
+                //agentSpawnPoint = new Vector3(0, 0.5f, 0);
+
+                //training
+                RandomSpawn();
+
                 break;
             case GameState.Stage2:
                 Goals[0].transform.localPosition = new Vector3(6.5f, -20, 0);
                 Walls[0].transform.localPosition = new Vector3(6f, 3.5f, 0);
-                agentSpawnPoint = new Vector3(12, 0.5f, 0);
+                //agentSpawnPoint = new Vector3(12, 0.5f, 0);
+
+                //training
+                RandomSpawn();
+
                 Switches[0].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage3:
                 Goals[1].transform.localPosition = new Vector3(6.5f, -20, 0);
-                agentSpawnPoint = new Vector3(27.5f, 0.5f, 0);
+                //agentSpawnPoint = new Vector3(27.5f, 0.5f, 0);
+
+                //training
+                RandomSpawn();
+
                 Walls[1].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[1].transform.localPosition = new Vector3(8, -20f, 0);
-                randomButtonPos();
+                //randomButtonPos();
                 break;
             case GameState.Stage4:
                 Goals[2].transform.localPosition = new Vector3(6.5f, -20, 0);
-                agentSpawnPoint = new Vector3(50, 0.5f, 0);
+                //agentSpawnPoint = new Vector3(50, 0.5f, 0);
+
+                //training
+                RandomSpawn();
+
                 Walls[2].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[2].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
@@ -97,7 +113,7 @@ public class GameManager : MonoBehaviour
                 //agentSpawnPoint = new Vector3(72, 0.5f, 0);
 
                 //for training
-                RandomSpawnS5();
+                RandomSpawn();
 
                 Walls[3].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[3].transform.localPosition = new Vector3(8f, -20f, 0);
@@ -107,7 +123,7 @@ public class GameManager : MonoBehaviour
                 //agentSpawnPoint = new Vector3(100, 0.5f, 0);
 
                 //for training
-                RandomSpawnS6();
+                RandomSpawn();
 
                 Walls[4].transform.localPosition = new Vector3(6f, 3.5f, 0);
                 Switches[4].transform.localPosition = new Vector3(8f, -20f, 0);
@@ -128,39 +144,112 @@ public class GameManager : MonoBehaviour
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
 
+        //forced for room training
+        for (int i = 0; i < Switches.Length; i++)
+        {
+            Switches[i].transform.localPosition = new Vector3(8f, -20f, 0);
+        }
         OnGameStateChanged?.Invoke(newState);
     }
 
-    private void RandomSpawnS5()
+    private void RandomSpawn()
     {
         int spawnIndex = Random.Range(0, 3);
-        switch (spawnIndex)
+        switch (State)
         {
-            case 0:
-                agentSpawnPoint = new Vector3(72, 0.5f, 0);
+            case GameState.Start:
                 break;
-            case 1:
-                agentSpawnPoint = new Vector3(72, 0.5f, 3.5f);
+            case GameState.Stage1:
+                switch (spawnIndex)
+                {
+                    case 0:
+                        agentSpawnPoint = new Vector3(0, 0.5f, 0);
+                        break;
+                    case 1:
+                        agentSpawnPoint = new Vector3(-7.5f, 0.5f, 0);
+                        break;
+                    case 2:
+                        agentSpawnPoint = new Vector3(-7.5f, 0.5f, 4f);
+                        break;
+                }
                 break;
-            case 2:
-                agentSpawnPoint = new Vector3(72, 0.5f, -4f);
+            case GameState.Stage2:
+                switch (spawnIndex)
+                {
+                    case 0:
+                        agentSpawnPoint = new Vector3(11f, 0.5f, 0);
+                        break;
+                    case 1:
+                        agentSpawnPoint = new Vector3(12f, 0.5f, 4);
+                        break;
+                    case 2:
+                        agentSpawnPoint = new Vector3(14f, 0.5f, 4f);
+                        break;
+                }
                 break;
-        }
-    }
-
-    private void RandomSpawnS6()
-    {
-        int spawnIndex = Random.Range(0, 3);
-        switch (spawnIndex)
-        {
-            case 0:
-                agentSpawnPoint = new Vector3(100, 0.5f, 0);
+            case GameState.Stage3:
+                switch (spawnIndex)
+                {
+                    case 0:
+                        agentSpawnPoint = new Vector3(27.5f, 0.5f, 0);
+                        break;
+                    case 1:
+                        agentSpawnPoint = new Vector3(27.5f, 0.5f, 4);
+                        break;
+                    case 2:
+                        agentSpawnPoint = new Vector3(27.5f, 0.5f, -4.5f);
+                        break;
+                }
                 break;
-            case 1:
-                agentSpawnPoint = new Vector3(115, 0.5f, 3.5f);
+            case GameState.Stage4:
+                switch (spawnIndex)
+                {
+                    case 0:
+                        agentSpawnPoint = new Vector3(50, 0.5f, 0);
+                        break;
+                    case 1:
+                        agentSpawnPoint = new Vector3(60, 0.5f, 0);
+                        break;
+                    case 2:
+                        agentSpawnPoint = new Vector3(60, 0.5f, -5f);
+                        break;
+                }
                 break;
-            case 2:
-                agentSpawnPoint = new Vector3(107.5f, 0.5f, -4f);
+            case GameState.Stage5:
+                switch (spawnIndex)
+                {
+                    case 0:
+                        agentSpawnPoint = new Vector3(72, 0.5f, 0);
+                        break;
+                    case 1:
+                        agentSpawnPoint = new Vector3(72, 0.5f, 3.5f);
+                        break;
+                    case 2:
+                        agentSpawnPoint = new Vector3(72, 0.5f, -4f);
+                        break;
+                }
+                break;
+            case GameState.Stage6:
+                switch (spawnIndex)
+                {
+                    case 0:
+                        agentSpawnPoint = new Vector3(100, 0.5f, 0);
+                        break;
+                    case 1:
+                        agentSpawnPoint = new Vector3(115, 0.5f, 3.5f);
+                        break;
+                    case 2:
+                        agentSpawnPoint = new Vector3(107.5f, 0.5f, -4f);
+                        break;
+                }
+                break;
+            case GameState.Stage7:
+                break;
+            case GameState.Loss:
+                break;
+            case GameState.Victory:
+                break;
+            default:
                 break;
         }
     }
@@ -179,9 +268,6 @@ public class GameManager : MonoBehaviour
         GateOpen = false;
         ResetBox();
         ResetTool();
-
-        if (State == GameState.Stage5)
-            RandomSpawnS5();
     }
 
     public void moveBlockages()
