@@ -7,6 +7,8 @@ TagManager:
   - goToWall
   - Box
   - Trail
+  - Ball
+  - Hand
   layers:
   - Default
   - TransparentFX
