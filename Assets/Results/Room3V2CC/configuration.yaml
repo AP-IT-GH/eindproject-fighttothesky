@@ -51,7 +51,7 @@ behaviors:
         demo_path: ../Demos/Room3V2.demo
       curiosity:
         gamma: 0.99
-        strength: 0.4
+        strength: 0.6
         network_settings:
           normalize: false
           hidden_units: 128
@@ -101,7 +101,7 @@ checkpoint_settings:
   initialize_from: null
   load_model: false
   resume: false
-  force: false
+  force: true
   train_model: false
   inference: false
   results_dir: results

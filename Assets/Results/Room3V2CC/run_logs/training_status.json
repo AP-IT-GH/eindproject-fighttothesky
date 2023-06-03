@@ -2,31 +2,40 @@
     "PrisonAgentRay": {
         "checkpoints": [
             {
-                "steps": 499992,
-                "file_path": "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-499992.onnx",
-                "reward": -1.6885714270387377,
-                "creation_time": 1685737703.4401183,
+                "steps": 499998,
+                "file_path": "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-499998.onnx",
+                "reward": -2.4423076119433103,
+                "creation_time": 1685741818.3137734,
                 "auxillary_file_paths": [
-                    "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-499992.pt"
+                    "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-499998.pt"
                 ]
             },
             {
-                "steps": 572176,
-                "file_path": "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-572176.onnx",
-                "reward": -1.4249999858438969,
-                "creation_time": 1685737986.5574064,
+                "steps": 999996,
+                "file_path": "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-999996.onnx",
+                "reward": -2.7769546624073764,
+                "creation_time": 1685743354.55169,
                 "auxillary_file_paths": [
-                    "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-572176.pt"
+                    "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-999996.pt"
+                ]
+            },
+            {
+                "steps": 1255232,
+                "file_path": "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-1255232.onnx",
+                "reward": -2.792527765533124,
+                "creation_time": 1685744186.0848958,
+                "auxillary_file_paths": [
+                    "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-1255232.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 572176,
+            "steps": 1255232,
             "file_path": "results\\Room3V2CC\\PrisonAgentRay.onnx",
-            "reward": -1.4249999858438969,
-            "creation_time": 1685737986.5574064,
+            "reward": -2.792527765533124,
+            "creation_time": 1685744186.0848958,
             "auxillary_file_paths": [
-                "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-572176.pt"
+                "results\\Room3V2CC\\PrisonAgentRay\\PrisonAgentRay-1255232.pt"
             ]
         }
     },
