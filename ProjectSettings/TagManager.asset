@@ -18,6 +18,11 @@ TagManager:
   - tool
   - basket
   - jumpPlate
+  - goToWall
+  - Box
+  - Trail
+  - Ball
+  - Hand
   layers:
   - Default
   - TransparentFX
@@ -25,8 +30,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Camera
+  - Lava
   - 
   - 
   - 
