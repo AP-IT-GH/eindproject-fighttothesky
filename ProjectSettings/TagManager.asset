@@ -4,6 +4,20 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Ground
+  - Agent
+  - borderWall
+  - pedestal
+  - goal
+  - button
+  - blockage
+  - platform
+  - switch
+  - box
+  - finish
+  - tool
+  - basket
+  - jumpPlate
   - goToWall
   - Box
   - Trail
