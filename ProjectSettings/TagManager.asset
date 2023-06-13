@@ -23,6 +23,7 @@ TagManager:
   - Trail
   - Ball
   - Hand
+  - buttonPlayer
   layers:
   - Default
   - TransparentFX
