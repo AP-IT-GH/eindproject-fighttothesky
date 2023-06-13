@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     public GameObject[] Blockages;
-    public GameObject[] Switches;
     public GameObject[] Walls;
     public GameObject[] Goals;
     public GameObject Tool;
@@ -60,7 +60,15 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        UpdateGameState(GameState.Stage6);
+        int y = SceneManager.GetActiveScene().buildIndex;
+        if (y == 0)
+            UpdateGameState(GameState.Stage1);
+        else if(y == 1)
+            UpdateGameState(GameState.Stage2);
+        else if (y == 2)
+            UpdateGameState(GameState.Stage5);
+        else if (y == 3)
+            UpdateGameState(GameState.Stage6);
         GateOpen = false;
 
         //if (State == GameState.Stage3)
@@ -93,8 +101,6 @@ public class GameManager : MonoBehaviour
 
                 //training
                 RandomSpawn();
-
-                Switches[0].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage3:
                 Goals[1].transform.localPosition = new Vector3(6.5f, -20, 0);
@@ -104,7 +110,6 @@ public class GameManager : MonoBehaviour
                 RandomSpawn();
 
                 Walls[1].transform.localPosition = new Vector3(6f, 3.5f, 0);
-                Switches[1].transform.localPosition = new Vector3(8, -20f, 0);
                 //randomButtonPos();
                 break;
             case GameState.Stage4:
@@ -115,7 +120,6 @@ public class GameManager : MonoBehaviour
                 RandomSpawn();
 
                 Walls[2].transform.localPosition = new Vector3(6f, 3.5f, 0);
-                Switches[2].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage5:
                 Goals[3].transform.localPosition = new Vector3(6.5f, -20, 0);
@@ -125,7 +129,6 @@ public class GameManager : MonoBehaviour
                 RandomSpawn();
 
                 Walls[3].transform.localPosition = new Vector3(6f, 3.5f, 0);
-                Switches[3].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage6:
                 Goals[4].transform.localPosition = new Vector3(6.5f, -20, 0);
@@ -135,13 +138,11 @@ public class GameManager : MonoBehaviour
                 RandomSpawn();
 
                 Walls[4].transform.localPosition = new Vector3(6f, 3.5f, 0);
-                Switches[4].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Stage7:
                 Goals[5].transform.localPosition = new Vector3(6.5f, -20, 0);
                 agentSpawnPoint = new Vector3(130, 0.5f, 0);
                 Walls[5].transform.localPosition = new Vector3(6f, 3.5f, 0);
-                Switches[5].transform.localPosition = new Vector3(8f, -20f, 0);
                 break;
             case GameState.Loss:
                 //agentSpawnPoint = new Vector3(0, 0.5f, 0);
@@ -153,11 +154,6 @@ public class GameManager : MonoBehaviour
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
 
-        //forced for room training
-        for (int i = 0; i < Switches.Length; i++)
-        {
-            Switches[i].transform.localPosition = new Vector3(8f, -20f, 0);
-        }
         OnGameStateChanged?.Invoke(newState);
     }
 
@@ -267,8 +263,6 @@ public class GameManager : MonoBehaviour
     {
         foreach (var wall in Walls)
             wall.transform.localPosition = new Vector3(6f, -20f, 0);
-        foreach (var swich in Switches)
-            swich.transform.localPosition = new Vector3(7f, 3.5f, 0);
         foreach (var blockage in Blockages)
             blockage.transform.localPosition = new Vector3(5f, 3.5f, 0);
         foreach (var goal in Goals)

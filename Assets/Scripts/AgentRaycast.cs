@@ -2,6 +2,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AgentRaycast : Agent
 {
@@ -251,9 +252,12 @@ public class AgentRaycast : Agent
         if (other.gameObject.CompareTag("goal"))
         {
             // update score
-            scoreManager.score++;
-            scoreManager.UpdateScoreText();
+            //scoreManager.score++;
+            //scoreManager.UpdateScoreText();
 
+            int y = SceneManager.GetActiveScene().buildIndex;
+            if (y < 3)
+                SceneManager.LoadScene(y + 1);              
             // update rewards
             SetReward(goalReward);
             //AddReward(goalReward);
@@ -274,32 +278,6 @@ public class AgentRaycast : Agent
             gameManager.SetGateTrue();
             buttonReward = 0;
             goalReward = 15;
-        }
-        else if (other.gameObject.CompareTag("switch"))
-        {
-            episodeDuration += 30;
-            //touchedButton = false;
-
-            // reset rewards per room
-            AddReward(switchReward);
-            buttonReward = 4;
-            platformReward = 0.4f;
-            toolReward = 0.5f;
-            basketReward = 0.5f;
-            
-            // Change state
-            if (gameManager.State == GameState.Stage1)
-                gameManager.UpdateGameState(GameState.Stage2);
-            else if (gameManager.State == GameState.Stage2)
-                gameManager.UpdateGameState(GameState.Stage3);
-            else if (gameManager.State == GameState.Stage3)
-                gameManager.UpdateGameState(GameState.Stage4);
-            else if (gameManager.State == GameState.Stage4)
-                gameManager.UpdateGameState(GameState.Stage5);
-            else if (gameManager.State == GameState.Stage5)
-                gameManager.UpdateGameState(GameState.Stage6);
-            else if (gameManager.State == GameState.Stage6)
-                gameManager.UpdateGameState(GameState.Stage7);
         }
         else if (other.gameObject.CompareTag("finish"))
         {
