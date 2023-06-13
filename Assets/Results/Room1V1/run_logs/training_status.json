@@ -9,15 +9,33 @@
                 "auxillary_file_paths": [
                     "results\\Room1V1\\PrisonAgentRay\\PrisonAgentRay-210378.pt"
                 ]
+            },
+            {
+                "steps": 212980,
+                "file_path": "results\\Room1V1\\PrisonAgentRay\\PrisonAgentRay-212980.onnx",
+                "reward": -2.9917525773195877,
+                "creation_time": 1686663340.7233694,
+                "auxillary_file_paths": [
+                    "results\\Room1V1\\PrisonAgentRay\\PrisonAgentRay-212980.pt"
+                ]
+            },
+            {
+                "steps": 216030,
+                "file_path": "results\\Room1V1\\PrisonAgentRay\\PrisonAgentRay-216030.onnx",
+                "reward": -2.2129031761038687,
+                "creation_time": 1686663968.4753792,
+                "auxillary_file_paths": [
+                    "results\\Room1V1\\PrisonAgentRay\\PrisonAgentRay-216030.pt"
+                ]
             }
         ],
         "final_checkpoint": {
-            "steps": 210378,
+            "steps": 216030,
             "file_path": "results\\Room1V1\\PrisonAgentRay.onnx",
-            "reward": 12.57500016151203,
-            "creation_time": 1685736083.123082,
+            "reward": -2.2129031761038687,
+            "creation_time": 1686663968.4753792,
             "auxillary_file_paths": [
-                "results\\Room1V1\\PrisonAgentRay\\PrisonAgentRay-210378.pt"
+                "results\\Room1V1\\PrisonAgentRay\\PrisonAgentRay-216030.pt"
             ]
         }
     },

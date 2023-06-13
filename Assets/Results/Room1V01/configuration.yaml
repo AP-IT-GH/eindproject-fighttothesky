@@ -97,7 +97,7 @@ engine_settings:
   no_graphics: false
 environment_parameters: null
 checkpoint_settings:
-  run_id: Room1V1
+  run_id: Room1V01
   initialize_from: null
   load_model: false
   resume: true

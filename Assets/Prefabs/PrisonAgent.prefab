@@ -135,7 +135,6 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   scoreManager: {fileID: 0}
-  gameManager: {fileID: 0}
   buttonReward: 12
   badWallReward: -8
   goalReward: 0
@@ -176,7 +175,7 @@ MonoBehaviour:
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
-  m_ObservableAttributeHandling: 0
+  m_ObservableAttributeHandling: 2
 --- !u!114 &7684137209387477821
 MonoBehaviour:
   m_ObjectHideFlags: 0

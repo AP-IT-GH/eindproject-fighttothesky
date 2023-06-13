@@ -1,13 +1,18 @@
+using Unity.Barracuda;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AgentRaycast : Agent
 {
     public Score scoreManager;
-    public GameManager gameManager;
-
+    //public GameManager gameManager;
+    private MainManager manager;
+    private BehaviorParameters behaviorParameters;
+    private NNModel brain;
 
     // rewards
     public float buttonReward = 4f;
@@ -41,17 +46,22 @@ public class AgentRaycast : Agent
 
     public override void Initialize()
     {
+        manager = FindObjectOfType<MainManager>();
+        scoreManager = FindObjectOfType<Score>();
         rb = this.GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        gameManager.Start();
-        agentSpawnPosition = gameManager.agentSpawnPoint;
+        //gameManager.Start();
+        agentSpawnPosition = manager.agentSpawn;
+        behaviorParameters = GetComponent<BehaviorParameters>();
+        brain = manager.currentBrain;
+        behaviorParameters.Model = brain;
 
         //if (gameManager.State == GameState.Stage3)
         //    gameManager.randomButtonPos();
     }
     public override void OnEpisodeBegin()
     {
-        gameManager.Reset();
+        //gameManager.Reset();
         this.transform.localPosition = agentSpawnPosition;
         this.transform.localRotation = Quaternion.identity;
 
@@ -74,24 +84,24 @@ public class AgentRaycast : Agent
         basketReward = 3.0f;
 
 
-        if (gameManager.State == GameState.Stage6)
-            gameManager.ResetTool();
+        if (manager.AIstate == AIState.Room4)
+            manager.ResetTool();
 
         // Reset any jump-related variables
         isJumping = false;
-        gameManager.UpdateGameState(gameManager.State);
+        //gameManager.UpdateGameState(gameManager.State);
 
-        if (gameManager.State == GameState.Stage3)
-            gameManager.randomButtonPos();
-        else if (gameManager.State == GameState.Stage1)
-            gameManager.randomButtonPosS1();
+        //if (gameManager.State == GameState.Stage3)
+        //    gameManager.randomButtonPos();
+        //else if (gameManager.State == GameState.Stage1)
+        //    gameManager.randomButtonPosS1();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(this.transform.localPosition);
         sensor.AddObservation(rb.velocity);
-        sensor.AddObservation(gameManager.GateOpen);
+        sensor.AddObservation(manager.GateOpen);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -102,20 +112,21 @@ public class AgentRaycast : Agent
         float rotationSignal = actionBuffers.ContinuousActions[2];
         float jumpMovement = actionBuffers.ContinuousActions[3];
 
-        //if (allowMovement)        {
-        // Apply movement and rotation
-        ApplyMovement(horizontalMovement, verticalMovement);
-
-        // Handle jumping
-        if (jumpMovement > 0.6)
+        
+        if (manager.allowMovement)
         {
-            Jump();
-            AddReward(-0.02f);
+            // Apply movement and rotation
+            ApplyMovement(horizontalMovement, verticalMovement);
+
+            // Handle jumping
+            if (jumpMovement > 0.6)
+            {
+                Jump();
+                AddReward(-0.02f);
+            }
+
+            ApplyRotation(rotationSignal);
         }
-
-        //}
-
-        ApplyRotation(rotationSignal);
 
         // Increase the elapsed time
         elapsedTime += Time.deltaTime;
@@ -123,26 +134,27 @@ public class AgentRaycast : Agent
         // Check if the desired duration has been reached
         if (elapsedTime >= episodeDuration)
         {
-            // End the episode
-            SetReward(-2f);
-            EndEpisode();
+            //SetReward(-2f);
+            //EndEpisode();
         }
 
         if (this.transform.localPosition.y < 0)
         {
+            manager.Reset();
+            manager.GateOpen = false;
             // if tool fell, reset position
-            if (gameManager.Tool.transform.localPosition.y < 0)
-                gameManager.ResetTool();
-            else if (gameManager.State == GameState.Stage5)
-                gameManager.ResetBox();
+            if (manager.AIstate == AIState.Room4)
+                manager.ResetTool();
+            else if (manager.AIstate == AIState.Room3)
+                manager.ResetBox();
 
             // punish for falling
-            print("afgevallen");
             SetReward(fallOffReward);
             EndEpisode();
         }
-        if (gameManager.box.transform.localPosition.y < 0)
-            gameManager.ResetBox();
+
+        //if (gameManager.box.transform.localPosition.y < 0)
+        //    gameManager.ResetBox();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -150,8 +162,9 @@ public class AgentRaycast : Agent
         if (collision.gameObject.CompareTag("blockage"))
         {
             SetReward(badWallReward);
-            if (gameManager.State == GameState.Stage5)
-                gameManager.ResetBox();
+            manager.GateOpen = false;
+            if (manager.AIstate == AIState.Room4)
+                manager.ResetTool();
             EndEpisode();
         }
         else if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("box") || collision.gameObject.CompareTag("platform") )
@@ -193,11 +206,11 @@ public class AgentRaycast : Agent
                 //    allowMovement = false;
                 //    touchedButton = true;
                 //}
-                gameManager.moveBlockages();
+                manager.moveBlockages();
 
                 AddReward(basketReward);
                 basketReward = 0;
-                gameManager.SetGateTrue();
+                manager.GateOpen = true;
                 goalReward = 15;
             }
         }
@@ -256,27 +269,24 @@ public class AgentRaycast : Agent
 
             // update rewards
             SetReward(goalReward);
-            //AddReward(goalReward);
             goalReward = 0;
-
-            EndEpisode();
+            
+            //EndEpisode();
         }
         else if (other.gameObject.CompareTag("button"))
         {
             AddReward(buttonReward);
 
-            gameManager.moveBlockages();
-            //if (!touchedButton)
-            //{
-            //    allowMovement = false;
-            //    touchedButton = true;
-            //}
-            gameManager.SetGateTrue();
+            manager.moveBlockages();
+
+            manager.GateOpen = true; // remove ? its VR door that opens..
+            manager.OpenVRDoor(); // opens the door of the vr player
             buttonReward = 0;
             goalReward = 15;
         }
         else if (other.gameObject.CompareTag("switch"))
         {
+            manager.GateOpen = false;
             episodeDuration += 30;
             //touchedButton = false;
 
@@ -286,34 +296,34 @@ public class AgentRaycast : Agent
             platformReward = 0.4f;
             toolReward = 0.5f;
             basketReward = 0.5f;
-            
+
             // Change state
-            if (gameManager.State == GameState.Stage1)
-                gameManager.UpdateGameState(GameState.Stage2);
-            else if (gameManager.State == GameState.Stage2)
-                gameManager.UpdateGameState(GameState.Stage3);
-            else if (gameManager.State == GameState.Stage3)
-                gameManager.UpdateGameState(GameState.Stage4);
-            else if (gameManager.State == GameState.Stage4)
-                gameManager.UpdateGameState(GameState.Stage5);
-            else if (gameManager.State == GameState.Stage5)
-                gameManager.UpdateGameState(GameState.Stage6);
-            else if (gameManager.State == GameState.Stage6)
-                gameManager.UpdateGameState(GameState.Stage7);
+            manager.UpdateAI();
+            //if (manager.AIstate == AIState.Room1)
+            //    manager.UpdateAI(manager.nextSate);
+            //else if (manager.AIstate == AIState.Room2)
+            //    manager.UpdateAI(manager.nextSate);
+            //else if (manager.AIstate == AIState.Room3)
+            //    manager.UpdateAI(manager.nextSate);
+            //else if (manager.AIstate == AIState.Room4)
+            //    manager.UpdateAI(manager.nextSate);
         }
         else if (other.gameObject.CompareTag("finish"))
         {
-            //touchedButton = false;
+            manager.GateOpen = false;
 
             // update score
             scoreManager.score++;
             scoreManager.UpdateScoreText();
 
             SetReward(15f);
-            gameManager.UpdateGameState(GameState.Stage1);
-            agentSpawnPosition = gameManager.agentSpawnPoint;
-            gameManager.Reset();
-            EndEpisode();
+            // open VR door --> method
+            manager.OpenVRDoor();
+
+            //gameManager.UpdateGameState(GameState.Stage1);
+            //agentSpawnPosition = gameManager.agentSpawnPoint;
+            //gameManager.Reset();
+            //EndEpisode();
             //GameManager.Instance.UpdateGameState(GameState.Victory);
         }
         else if (other.gameObject.CompareTag("jumpPlate"))
@@ -410,11 +420,12 @@ public class AgentRaycast : Agent
 
     private void Update()
     {
-        agentSpawnPosition = gameManager.agentSpawnPoint;
-        //if (Input.GetKey(KeyCode.N) && touchedButton)
-        //{
-        //    GameManager.Instance.moveBlockages();
-        //    allowMovement = true;
-        //}
+        agentSpawnPosition = manager.agentSpawn;
+    }
+
+    public void GiveModel(string behaviorName, NNModel model)
+    {
+        behaviorParameters.Model = model;
+        behaviorParameters.BehaviorName = behaviorName;
     }
 }
