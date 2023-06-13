@@ -24,6 +24,7 @@ TagManager:
   - Ball
   - Hand
   - buttonPlayer
+  - WallForAi
   layers:
   - Default
   - TransparentFX

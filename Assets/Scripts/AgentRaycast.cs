@@ -10,6 +10,16 @@ public class AgentRaycast : Agent
     public GameManager gameManager;
 
 
+
+
+    // If he can move if the player is far enough
+    private bool allowMovement = true;
+    public GameObject blockage;
+
+    // Destory wall of player
+    public GameObject WallToDestroy;
+
+
     // rewards
     public float buttonReward = 4f;
     public float badWallReward = -1.0f;
@@ -26,8 +36,8 @@ public class AgentRaycast : Agent
     public float rotationSpeed = 10f;
 
     // variable for etc
-    private float episodeDuration = 90f; // Duration of the episode in seconds
-    private float elapsedTime = 0f; // Elapsed time since the episode started
+    //private float episodeDuration = 90f; // Duration of the episode in seconds
+    //private float elapsedTime = 0f; // Elapsed time since the episode started
     private Vector3 agentSpawnPosition;
     private bool droppedOff = false;
 
@@ -58,7 +68,7 @@ public class AgentRaycast : Agent
 
 
         // Reset the environment and agent state
-        elapsedTime = 0f;
+        //elapsedTime = 0f;
         droppedOff = false;
         //allowMovement = true;
         //touchedButton = false;
@@ -103,7 +113,7 @@ public class AgentRaycast : Agent
         float rotationSignal = actionBuffers.ContinuousActions[2];
         float jumpMovement = actionBuffers.ContinuousActions[3];
 
-        //if (allowMovement)        {
+        if (allowMovement)        {
         // Apply movement and rotation
         ApplyMovement(horizontalMovement, verticalMovement);
 
@@ -113,21 +123,25 @@ public class AgentRaycast : Agent
             Jump();
             AddReward(-0.02f);
         }
-
-        //}
+        }
 
         ApplyRotation(rotationSignal);
 
         // Increase the elapsed time
-        elapsedTime += Time.deltaTime;
+        //elapsedTime += Time.deltaTime;
+
+        if (!blockage.activeSelf)
+        {
+            allowMovement = true;
+        }
 
         // Check if the desired duration has been reached
-        if (elapsedTime >= episodeDuration)
+        /*if (elapsedTime >= episodeDuration)
         {
             // End the episode
             SetReward(-2f);
             EndEpisode();
-        }
+        }*/
 
         if (this.transform.localPosition.y < 0)
         {
@@ -138,7 +152,7 @@ public class AgentRaycast : Agent
                 gameManager.ResetBox();
 
             // punish for falling
-            print("afgevallen");
+            //print("afgevallen");
             SetReward(fallOffReward);
             EndEpisode();
         }
@@ -194,11 +208,13 @@ public class AgentRaycast : Agent
                 //    allowMovement = false;
                 //    touchedButton = true;
                 //}
-                gameManager.moveBlockages();
-
+                Destroy(WallToDestroy);
+                //gameManager.moveBlockages();
+                gameManager.SetGateTrue();
+                allowMovement = false;
                 AddReward(basketReward);
                 basketReward = 0;
-                gameManager.SetGateTrue();
+                
                 goalReward = 15;
             }
         }
@@ -269,13 +285,16 @@ public class AgentRaycast : Agent
         {
             AddReward(buttonReward);
 
-            gameManager.moveBlockages();
+            
             //if (!touchedButton)
             //{
             //    allowMovement = false;
             //    touchedButton = true;
             //}
+            Destroy(WallToDestroy);
+            //gameManager.moveBlockages();
             gameManager.SetGateTrue();
+            allowMovement = false;
             buttonReward = 0;
             goalReward = 15;
         }
