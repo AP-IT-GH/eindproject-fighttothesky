@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        UpdateGameState(GameState.Stage3);
+        UpdateGameState(GameState.Stage6);
         GateOpen = false;
 
         //if (State == GameState.Stage3)
