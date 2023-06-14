@@ -23,6 +23,8 @@ TagManager:
   - Trail
   - Ball
   - Hand
+  - buttonPlayer
+  - WallForAi
   layers:
   - Default
   - TransparentFX

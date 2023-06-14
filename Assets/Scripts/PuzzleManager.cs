@@ -21,7 +21,8 @@ public class PuzzleManager : MonoBehaviour
     {
         if(CurrentCompletedTasks >= numOfTasksToComplete)
         {
-            Destroy(WallToDestroy);
+            //Destroy(WallToDestroy);
+            WallToDestroy.SetActive(false);
         }
     }
 
